@@ -1,6 +1,3 @@
-# src/ingestion/ingestor.py
-
-import os
 from typing import List, Dict
 from pathlib import Path
 import fitz  # PyMuPDF
@@ -8,7 +5,7 @@ import docx
 import uuid
 import datetime
 
-SUPPORTED_EXTENSIONS = [".pdf", ".docx"]
+SUPPORTED_EXTENSIONS = [".pdf", ".docx", ".txt"]
 
 def extract_text_from_pdf(file_path: Path) -> str:
     doc = fitz.open(file_path)
@@ -21,11 +18,17 @@ def extract_text_from_docx(file_path: Path) -> str:
     doc = docx.Document(file_path)
     return "\n".join([para.text for para in doc.paragraphs])
 
+def extract_text_from_txt(file_path: Path) -> str:
+    with open(file_path, "r", encoding="utf-8") as f:
+        return f.read()
+
 def extract_text(file_path: Path) -> str:
     if file_path.suffix == ".pdf":
         return extract_text_from_pdf(file_path)
     elif file_path.suffix == ".docx":
         return extract_text_from_docx(file_path)
+    elif file_path.suffix == ".txt":
+        return extract_text_from_txt(file_path)
     else:
         raise ValueError(f"Unsupported file type: {file_path.suffix}")
 
@@ -34,7 +37,7 @@ def process_documents(input_folder: Path, output_folder: Path) -> List[Dict]:
     processed_docs = []
 
     for file in input_folder.iterdir():
-        if file.suffix not in SUPPORTED_EXTENSIONS:
+        if file.suffix.lower() not in SUPPORTED_EXTENSIONS:
             continue
 
         print(f"Procesando: {file.name}")
