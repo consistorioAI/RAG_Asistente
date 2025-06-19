@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Entorno virtual
+venv/
+
+# Entorno de configuración
+.env
+
+# Excluir todos los archivos de data/
+data/
+
+# Pero conservar la estructura si quieres que la carpeta exista vacía
+!data/.gitkeep
+
+
+# Archivos temporales
+*.tmp
+*.bak
+*.swp
+
+# IDE
+.vscode/
