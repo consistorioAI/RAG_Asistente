@@ -179,16 +179,6 @@
 
 ---
 
-Perfecto, aquí tienes el **log actualizado** incluyendo todo lo trabajado desde el último punto, más el ajuste de chunking, reinicio limpio y preparación para multi-GPT:
-
----
-
-# **LOG DE DESARROLLO - SISTEMA RAG CON EMBEDDINGS LOCALES Y WEAVIATE**
-
-**Fecha de corte: Última reindexación tras ajuste de chunks y preparación multi-GPT**
-
----
-
 ### **FASE 11: Preparación para múltiples GPTs / Conjuntos de conocimiento**
 
 - Inclusión de parámetro `gpt_id` en:
