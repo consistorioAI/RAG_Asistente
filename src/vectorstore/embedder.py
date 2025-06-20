@@ -33,7 +33,7 @@ def load_documents_from_folder(folder_path: Path):
     return documents
 
 
-def chunk_documents(documents, chunk_size=500, chunk_overlap=50):
+def chunk_documents(documents, chunk_size=300, chunk_overlap=30):
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap
@@ -46,14 +46,31 @@ def chunk_documents(documents, chunk_size=500, chunk_overlap=50):
     return chunks
 
 
-def index_chunks(chunks, index_name="LegalDocs"):
+def index_chunks(chunks, gpt_id="default"):
+    """
+    Indexa los chunks en la base vectorial Weaviate.
+
+    El nombre de la clase de Weaviate será:
+    - "LegalDocs" si gpt_id == "default"
+    - "LegalDocs_<gpt_id>" en cualquier otro caso
+    """
+    # Determinar nombre del índice según el GPT
+    index_name = "LegalDocs" if gpt_id == "default" else f"LegalDocs_{gpt_id}"
+
     client = get_weaviate_client()
 
+    # Si la clase no existe aún en Weaviate, crearla
     if not any(cls["class"] == index_name for cls in client.schema.get()["classes"]):
-
         class_obj = {
             "class": index_name,
-            "vectorizer": "none"
+            "vectorizer": "none",
+            "properties": [
+                {"name": "text", "dataType": ["text"]},
+                {"name": "doc_id", "dataType": ["text"]},
+                {"name": "filename", "dataType": ["text"]},
+                {"name": "created", "dataType": ["text"]},
+                {"name": "source", "dataType": ["text"]}
+            ]
         }
         client.schema.create_class(class_obj)
 
@@ -73,3 +90,4 @@ def index_chunks(chunks, index_name="LegalDocs"):
         texts=texts,
         metadatas=metadatas
     )
+

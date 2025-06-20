@@ -1,9 +1,9 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import Optional, List, Dict 
 
 class QueryRequest(BaseModel):
     question: str
-    gpt_id: Optional[str] = None  # Preparado para futuro multi-GPT
+    gpt_id: Optional[str] = "default"  # ← clave para selección de colección
 
 class SourceDocument(BaseModel):
     content: str

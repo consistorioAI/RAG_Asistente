@@ -24,7 +24,8 @@ def query(request: QueryRequest):
         )
 
     try:
-        chain = get_rag_chain(k=5)
+        
+        chain = get_rag_chain(gpt_id=request.gpt_id, k=5)
         result = chain(request.question)
 
         sources = [

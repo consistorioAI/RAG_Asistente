@@ -45,11 +45,12 @@ def process_documents(input_folder: Path, output_folder: Path) -> List[Dict]:
             content = extract_text(file)
             doc_id = str(uuid.uuid4())
             metadata = {
-                "id": doc_id,
+                "doc_id": doc_id,
                 "filename": file.name,
                 "created": datetime.datetime.now().isoformat(),
                 "source": str(file.resolve())
             }
+
 
             with open(output_folder / f"{doc_id}.txt", "w", encoding="utf-8") as f_out:
                 f_out.write(content)

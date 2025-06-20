@@ -1,4 +1,4 @@
-# Log de desarrollo – RAG con GPT y Weaviate
+
 **Fecha de corte: Última integración verificada con GPT personalizado y respuesta simulada vía API**
 
 ---
@@ -179,17 +179,99 @@
 
 ---
 
-### **ESTADO ACTUAL DEL PROYECTO**
+Perfecto, aquí tienes el **log actualizado** incluyendo todo lo trabajado desde el último punto, más el ajuste de chunking, reinicio limpio y preparación para multi-GPT:
 
-- Sistema RAG operativo y accesible vía API REST en entorno local
+---
+
+# **LOG DE DESARROLLO - SISTEMA RAG CON EMBEDDINGS LOCALES Y WEAVIATE**
+
+**Fecha de corte: Última reindexación tras ajuste de chunks y preparación multi-GPT**
+
+---
+
+### **FASE 11: Preparación para múltiples GPTs / Conjuntos de conocimiento**
+
+- Inclusión de parámetro `gpt_id` en:
     
-- LLM local persistente funcionando en modo servidor
+    - `query_generator.py`
+        
+    - `query_retriever.py`
+        
+    - API REST (`QueryRequest`)
+        
+- Creación del diccionario `GPT_PROFILES` que permite configurar:
     
-- Integrado con GPT personalizado a través de función externa
+    - Clase de Weaviate asociada (`class_name`)
+        
+    - Prompt especializado
+        
+- Lógica modular en `get_rag_chain()` y `get_retriever()` para aplicar el `gpt_id`
     
-- Capaz de generar respuestas reales o simuladas según configuración
+- Preparación para asignar distintos subconjuntos documentales (por clase o metadatos)
     
-- Controlado por variables de entorno portables (`.env`)
+- Simulación de estructura futura para múltiples GPTs (`legal`, `laboral`, etc.)
     
-- Listo para escalabilidad, despliegue futuro en Azure y múltiples GPTs
+
+---
+
+### **FASE 12: Ajuste fino del chunking y reinicio limpio del sistema**
+
+- Cambio de `chunk_size` a 300 y `chunk_overlap` a 30 en `chunk_documents`
     
+- Limpieza completa del entorno:
+    
+    - Eliminación de `data/chunks/*.txt`
+        
+    - Eliminación de `.processed_files.json`
+        
+    - Borrado completo de la clase `LegalDocs` en Weaviate
+        
+- Reindexación total con los nuevos parámetros:
+    
+    ```bash
+    python scripts/sync_and_index.py --gpt_id default
+    ```
+    
+- Confirmación de regeneración exitosa con chunks más cortos y mejor distribuidos
+    
+
+---
+
+### **FASE 13: Preparación para reindexado automático y gestión de cambios**
+
+- Creación del script `sync_and_index.py`:
+    
+    - Detecta nuevos documentos en `data/raw`
+        
+    - Evita duplicación de archivos ya procesados
+        
+    - Vuelve a trocear y reindexar solo lo nuevo
+        
+- Control mediante archivo `.processed_files.json`
+    
+- Parametrización por `--gpt_id` para clasificar por GPT
+    
+- Listo para ejecución manual o futura automatización por `cron` / `Task Scheduler`
+    
+#### limpieza y reindexación
+```
+(venv) PS C:\Users\ramon\Desktop\RAG_asistente> del data\chunks\*.txt (venv) PS C:\Users\ramon\Desktop\RAG_asistente> python scripts/delete_class.py Clase 'LegalDocs' eliminada de Weaviate. (venv) PS C:\Users\ramon\Desktop\RAG_asistente> del data\.processed_files.json (venv) PS C:\Users\ramon\Desktop\RAG_asistente> python scripts/sync_and_index.py --gpt_id default
+```
+
+---
+
+### **PENDIENTE ACTUAL**
+
+-  Truncado dinámico del contexto para evitar errores `Requested tokens exceed context window`
+    
+-  Commit de todos los cambios acumulados (`git add . && git commit -m "Checkpoint tras ajuste de chunks y soporte multi-GPT"`)
+    
+-  Validar resultados tras nueva indexación con consulta ejemplo
+    
+
+---
+TO DO:
+
+``` bash 
+(venv) PS C:\Users\ramon\Desktop\RAG_asistente> python .\scripts\query_generator.py Generador RAG iniciado. (Ctrl+C para salir). Pregunta legal: ¿Cuál es el plazo legal para presentar un recurso administrativo en un procedimiento de contratación pública? [Error durante la generación]: Requested tokens (34294) exceed context window of 2048
+```
