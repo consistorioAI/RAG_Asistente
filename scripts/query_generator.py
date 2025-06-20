@@ -12,13 +12,14 @@ warnings.filterwarnings("ignore")
 # Redirigir stderr a null para ocultar errores técnicos no críticos
 null_output = open(os.devnull, 'w')
 sys.path.append(str(Path(__file__).resolve().parent.parent))
+NUM_K = 3  # Número de documentos a recuperar
 
 from src.rag_logic.generator import get_rag_chain
 
 if __name__ == "__main__":
     with redirect_stderr(null_output):
         print("Generador RAG iniciado. (Ctrl+C para salir).")
-        chain = get_rag_chain(k=5)
+        chain = get_rag_chain(NUM_K)
 
         while True:
             try:

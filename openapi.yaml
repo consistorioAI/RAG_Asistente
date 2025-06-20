@@ -1,0 +1,44 @@
+info:
+  description: API de consulta legal basada en RAG para documentos internos
+  title: RAG Legal API
+  version: '1.0'
+openapi: 3.1.0
+paths:
+  /query:
+    post:
+      operationId: queryLegal
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                gpt_id:
+                  description: (Opcional) Identificador del GPT que hace la pregunta
+                  type: string
+                question:
+                  description: Pregunta legal a responder
+                  type: string
+              type: object
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  answer:
+                    type: string
+                  sources:
+                    items:
+                      properties:
+                        content:
+                          type: string
+                        metadata:
+                          type: object
+                      type: object
+                    type: array
+                type: object
+          description: Respuesta generada
+      summary: Consultar el sistema RAG
+servers:
+- url: https://ae1d-192-145-38-30.ngrok-free.app

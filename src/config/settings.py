@@ -17,3 +17,5 @@ ONEDRIVE_PATH = Path(os.getenv("ONEDRIVE_PATH", BASE_DIR / "onedrive"))
 DATA_RAW_PATH = Path(os.getenv("DATA_RAW_PATH", BASE_DIR / "data" / "raw"))
 DATA_CHUNKS_PATH = Path(os.getenv("DATA_CHUNKS_PATH", BASE_DIR / "data" / "chunks"))
 DATA_INDEX_PATH = Path(os.getenv("DATA_INDEX_PATH", BASE_DIR / "data" / "index"))
+
+USE_MOCK_MODE = os.getenv("USE_MOCK_MODE", "false").lower() == "false"
