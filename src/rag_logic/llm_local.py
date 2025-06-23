@@ -11,7 +11,7 @@ def get_local_llm():
     return LlamaCpp(
         model_path=str(dummy_model_path),  # requerido por Pydantic
         model_url="http://localhost:8001",  # este prevalece
-        n_ctx=2048,
+        n_ctx=4096,
         temperature=0.0,
         verbose=False
     )

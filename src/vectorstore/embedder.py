@@ -33,7 +33,7 @@ def load_documents_from_folder(folder_path: Path):
     return documents
 
 
-def chunk_documents(documents, chunk_size=300, chunk_overlap=30):
+def chunk_documents(documents, chunk_size=500, chunk_overlap=100):
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap

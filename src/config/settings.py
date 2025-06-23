@@ -41,7 +41,7 @@ DATA_INDEX_PATH = Path(os.getenv("DATA_INDEX_PATH", BASE_DIR / "data" / "index")
 # Verifica si el modo de simulación está activado
 # Si USE_MOCK_MODE es "true", se simularán las respuestas sin usar el LLM real
 # Si es "false", se usará el LLM real para generar respuestas
-USE_MOCK_MODE = os.getenv("USE_MOCK_MODE", "false").lower() == "false"
+USE_MOCK_MODE = os.getenv("USE_MOCK_MODE", "false").lower() == "true"
 
 # Ruta a los documentos para ingesta
 DOCS_INPUT_PATH = os.getenv("DOCS_INPUT_PATH", "data/raw")

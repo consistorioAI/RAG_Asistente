@@ -41,4 +41,4 @@ paths:
           description: Respuesta generada
       summary: Consultar el sistema RAG
 servers:
-- url: https://914b-192-145-38-30.ngrok-free.app
+- url: https://9d5e-185-187-243-197.ngrok-free.app
