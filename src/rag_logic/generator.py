@@ -4,6 +4,7 @@ from langchain_core.documents import Document
 from src.rag_logic.retriever_module import get_retriever
 from src.rag_logic.llm_local import get_local_llm
 from src.config.gpt_profiles import GPT_PROFILES
+from src.config import settings
 from transformers import BertTokenizer
 from langchain.prompts import PromptTemplate
 
@@ -53,6 +54,13 @@ def get_rag_chain(gpt_id: str = "default", k: int = 5):
     def run_rag(question: str):
         docs = retriever.get_relevant_documents(question)
         docs = filter_docs_by_token_limit(docs, max_tokens=3000)
+
+        if settings.DEBUG_PRINT_CONTEXT:
+            print("\n[DEBUG] Contexto recuperado:")
+            for i, doc in enumerate(docs, 1):
+                print(f"\n--- Documento {i} ---")
+                print(doc.page_content)
+                print("Metadatos:", doc.metadata)
 
         return combine_chain.run({
             "input_documents": docs,

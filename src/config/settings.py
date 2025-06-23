@@ -43,6 +43,10 @@ DATA_INDEX_PATH = Path(os.getenv("DATA_INDEX_PATH", BASE_DIR / "data" / "index")
 # Si es "false", se usará el LLM real para generar respuestas
 USE_MOCK_MODE = os.getenv("USE_MOCK_MODE", "false").lower() == "true"
 
+# Si DEBUG_PRINT_CONTEXT es "true", se imprimirá en consola el contexto recuperado
+# antes de enviarlo al LLM. Útil para depuración.
+DEBUG_PRINT_CONTEXT = os.getenv("DEBUG_PRINT_CONTEXT", "false").lower() == "true"
+
 # Ruta a los documentos para ingesta
 DOCS_INPUT_PATH = os.getenv("DOCS_INPUT_PATH", "data/raw")
 
