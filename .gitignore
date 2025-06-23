@@ -11,6 +11,8 @@ venv/
 # Entorno de configuración
 .env
 
+APIkey.txt
+
 # Excluir todos los archivos de data/
 data/
 

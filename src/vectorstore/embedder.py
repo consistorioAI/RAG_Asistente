@@ -1,3 +1,4 @@
+#src/vectorstore/embedder.py
 from pathlib import Path
 import weaviate  # Cliente v3
 from langchain_community.embeddings import HuggingFaceEmbeddings
