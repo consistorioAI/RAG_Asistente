@@ -86,3 +86,6 @@ MAX_CONTEXT_TOKENS = int(os.getenv("MAX_CONTEXT_TOKENS", "3000"))
 # Límite máximo de tokens generados por el modelo para cada respuesta
 MAX_COMPLETION_TOKENS = int(os.getenv("MAX_COMPLETION_TOKENS", "800"))
 
+# Número de documentos a recuperar por el retriever si no se especifica otro valor
+RETRIEVER_K = int(os.getenv("RETRIEVER_K", "5"))
+

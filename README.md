@@ -148,6 +148,7 @@
 - Variables `MAX_CONTEXT_TOKENS` y `MAX_COMPLETION_TOKENS` permiten ajustar los
   límites de tokens de contexto y respuesta al usar la API de OpenAI
 - Se añadió autenticación por cabecera `X-API-Key` y reutilización de clientes para mejorar el rendimiento
+- Nueva variable `RETRIEVER_K` define cuántos documentos recupera el sistema por defecto
     
 
 ---

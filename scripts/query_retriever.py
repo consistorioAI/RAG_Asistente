@@ -5,9 +5,10 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from src.rag_logic.retriever_module import get_retriever
+from src.config import settings
 
 if __name__ == "__main__":
-    retriever = get_retriever(k=5)
+    retriever = get_retriever(k=settings.RETRIEVER_K)
     
     query = input("Introduce tu pregunta o búsqueda: ")
 
