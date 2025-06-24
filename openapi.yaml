@@ -7,6 +7,8 @@ paths:
   /query:
     post:
       operationId: queryLegal
+      security:
+        - ApiKeyAuth: []
       requestBody:
         content:
           application/json:
@@ -42,3 +44,10 @@ paths:
       summary: Consultar el sistema RAG
 servers:
 - url: https://9d5e-185-187-243-197.ngrok-free.app
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

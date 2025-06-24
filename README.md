@@ -147,6 +147,7 @@
   enviado al LLM para depuración
 - Variables `MAX_CONTEXT_TOKENS` y `MAX_COMPLETION_TOKENS` permiten ajustar los
   límites de tokens de contexto y respuesta al usar la API de OpenAI
+- Se añadió autenticación por cabecera `X-API-Key` y reutilización de clientes para mejorar el rendimiento
     
 
 ---
@@ -266,10 +267,6 @@
 
 ### **PENDIENTE ACTUAL**
 
--  Truncado dinámico del contexto para evitar errores `Requested tokens exceed context window`
-    
--  Commit de todos los cambios acumulados (`git add . && git commit -m "Checkpoint tras ajuste de chunks y soporte multi-GPT"`)
-    
 -  Validar resultados tras nueva indexación con consulta ejemplo
     
 

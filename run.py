@@ -9,7 +9,7 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent
 OPENAPI_PATH = BASE_DIR / "openapi.yaml"
-LLM_MODEL_PATH = Path("C:/Users/ramon/ModelosLLM/mistral-7b-instruct-v0.1.Q4_K_M.gguf")
+LLM_MODEL_PATH = Path(os.getenv("LLM_MODEL_PATH", BASE_DIR / "models" / "mistral-7b-instruct-v0.1.Q4_K_M.gguf"))
 PORT_API = 8000
 PORT_LLM = 8001
 
