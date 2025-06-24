@@ -39,7 +39,7 @@
 
 - División de los documentos en chunks usando `RecursiveCharacterTextSplitter`
     
-- Uso de embeddings locales con modelo `sentence-transformers/all-MiniLM-L6-v2`
+- Uso de embeddings locales con modelo `BAAI/bge-small-en-v1.5`
     
 - Downgrade del cliente `weaviate-client` a versión 3.26.7 (por incompatibilidad con LangChain y cliente v4)
     

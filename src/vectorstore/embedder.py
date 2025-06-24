@@ -10,8 +10,9 @@ from functools import lru_cache
 
 
 def get_local_embedder():
+    """Return a local embedding model."""
     return HuggingFaceEmbeddings(
-        model_name="sentence-transformers/all-MiniLM-L6-v2"
+        model_name="BAAI/bge-small-en-v1.5"
     )
 
 
