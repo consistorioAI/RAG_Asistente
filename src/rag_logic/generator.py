@@ -8,6 +8,7 @@ from transformers import BertTokenizer
 from langchain.prompts import PromptTemplate
 from src.config import settings
 from src.rag_logic.llm_openai import get_openai_llm
+from functools import lru_cache
 
 
 # Tokenizer para estimar tamaño de contexto
@@ -16,18 +17,30 @@ tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
 def estimate_tokens(text: str) -> int:
     return len(tokenizer.encode(text, truncation=False))
 
+def truncate_text(text: str, max_tokens: int) -> str:
+    tokens = tokenizer.encode(text, truncation=True, max_length=max_tokens)
+    return tokenizer.decode(tokens, skip_special_tokens=True)
+
+
 def filter_docs_by_token_limit(docs, max_tokens: int = settings.MAX_CONTEXT_TOKENS):
+    """Limita el contexto total a un máximo de tokens."""
     total = 0
     selected = []
     for doc in docs:
         tokens = estimate_tokens(doc.page_content)
         if total + tokens > max_tokens:
+            remaining = max_tokens - total
+            if remaining <= 0:
+                break
+            doc.page_content = truncate_text(doc.page_content, remaining)
+            selected.append(doc)
             break
         selected.append(doc)
         total += tokens
     return selected
 
 
+@lru_cache(maxsize=None)
 def get_rag_chain(gpt_id: str = "default", k: int = 5):
     profile = GPT_PROFILES.get(gpt_id, GPT_PROFILES["default"])
 

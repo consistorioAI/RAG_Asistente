@@ -1,4 +1,5 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends, Header
+from fastapi.concurrency import run_in_threadpool
 from src.api.schemas import QueryRequest, QueryResponse, SourceDocument
 from src.rag_logic.generator import get_rag_chain
 from fastapi.responses import FileResponse
@@ -9,8 +10,14 @@ from src.config import settings  # <-- importar configuración del .env
 
 app = FastAPI(title="RAG API", description="API de consulta semántica legal", version="0.1.0")
 
+
+def verify_api_key(x_api_key: str = Header(None)):
+    if settings.API_KEY and x_api_key != settings.API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid API key")
+    return True
+
 @app.post("/query", response_model=QueryResponse)
-def query(request: QueryRequest):
+async def query(request: QueryRequest, valid: bool = Depends(verify_api_key)):
     if settings.USE_MOCK_MODE:
         print(f"[MOCK] Recibida pregunta: {request.question}")
         return QueryResponse(
@@ -26,7 +33,7 @@ def query(request: QueryRequest):
     try:
         
         chain = get_rag_chain(gpt_id=request.gpt_id, k=5)
-        result = chain(request.question)
+        result = await run_in_threadpool(chain, request.question)
 
         sources = [
             SourceDocument(

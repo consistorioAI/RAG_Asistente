@@ -1,17 +1,19 @@
 # src/rag_logic/llm_local.py
 
-from langchain_community.llms import LlamaCpp  
+from langchain_community.llms import LlamaCpp
 from pathlib import Path
+from functools import lru_cache
+from src.config import settings
 
 
+@lru_cache(maxsize=1)
 def get_local_llm():
-    # Ruta real al modelo que ya estás sirviendo por el servidor
-    dummy_model_path = Path("C:/Users/ramon/ModelosLLM/mistral-7b-instruct-v0.1.Q4_K_M.gguf")
+    """Devuelve una instancia compartida del LLM local."""
 
     return LlamaCpp(
-        model_path=str(dummy_model_path),  # requerido por Pydantic
-        model_url="http://localhost:8001",  # este prevalece
+        model_path=str(settings.LLM_MODEL_PATH),  # requerido por Pydantic
+        model_url=settings.LLM_MODEL_URL,
         n_ctx=4096,
         temperature=0.0,
-        verbose=False
+        verbose=False,
     )

@@ -22,11 +22,14 @@ OPENAI_MODEL_NAME = os.getenv("OPENAI_MODEL_NAME", "gpt-4o")
 # Este URL debe apuntar a tu instancia de Weaviate, ya sea local o en la nube
 # Se usa para la indexación y búsqueda de documentos legales
 WEAVIATE_URL = os.getenv("WEAVIATE_URL")
+WEAVIATE_API_KEY = os.getenv("WEAVIATE_API_KEY")
 
 # Verifica si se debe usar un LLM local o uno remoto
 # Si USE_LOCAL_LLM es "true", se usará un modelo local, de lo contrario, se usará un modelo remoto
 # Esta variable se usa para decidir si se conecta a un modelo local o a la API de OpenAI
 USE_LOCAL_LLM = os.getenv("USE_LOCAL_LLM", "true").lower() == "true"
+LLM_MODEL_PATH = Path(os.getenv("LLM_MODEL_PATH", BASE_DIR / "models" / "mistral-7b-instruct-v0.1.Q4_K_M.gguf"))
+LLM_MODEL_URL = os.getenv("LLM_MODEL_URL", "http://localhost:8001")
 
 # Ruta al directorio de OneDrive, donde se almacenarán los documentos legales
 # Este directorio se usa para sincronizar documentos desde OneDrive a la aplicación
@@ -65,6 +68,9 @@ USE_MOCK_MODE = os.getenv("USE_MOCK_MODE", "false").lower() == "true"
 # Si DEBUG_PRINT_CONTEXT es "true", se imprimirá en consola el contexto recuperado
 # antes de enviarlo al LLM. Útil para depuración.
 DEBUG_PRINT_CONTEXT = os.getenv("DEBUG_PRINT_CONTEXT", "false").lower() == "true"
+
+# Clave para autenticación de la API FastAPI
+API_KEY = os.getenv("API_KEY")
 
 # Ruta a los documentos para ingesta
 DOCS_INPUT_PATH = os.getenv("DOCS_INPUT_PATH", "data/raw")

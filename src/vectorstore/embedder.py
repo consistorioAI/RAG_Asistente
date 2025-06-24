@@ -5,6 +5,8 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Weaviate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from src.config import settings
+from weaviate.auth import AuthApiKey
+from functools import lru_cache
 
 
 def get_local_embedder():
@@ -13,10 +15,12 @@ def get_local_embedder():
     )
 
 
+@lru_cache(maxsize=1)
 def get_weaviate_client():
-    return weaviate.Client(
-        url=settings.WEAVIATE_URL
-    )
+    auth = None
+    if settings.WEAVIATE_API_KEY:
+        auth = AuthApiKey(api_key=settings.WEAVIATE_API_KEY)
+    return weaviate.Client(url=settings.WEAVIATE_URL, auth_client_secret=auth)
 
 
 def load_documents_from_folder(folder_path: Path):
