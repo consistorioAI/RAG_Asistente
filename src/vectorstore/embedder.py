@@ -1,4 +1,3 @@
-#src/vectorstore/embedder.py
 from pathlib import Path
 import weaviate  # Cliente v3
 from langchain_community.embeddings import HuggingFaceEmbeddings
@@ -7,24 +6,24 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from src.config import settings
 from weaviate.auth import AuthApiKey
 from functools import lru_cache
+import os
 
 
 def get_local_embedder():
-    """Return a local embedding model."""
+    """Devuelve un modelo de embedding local (BAAI/bge-small-en-v1.5)."""
     return HuggingFaceEmbeddings(
         model_name="BAAI/bge-small-en-v1.5"
     )
 
-
 @lru_cache(maxsize=1)
 def get_weaviate_client():
-    auth = None
-    if settings.WEAVIATE_API_KEY:
-        auth = AuthApiKey(api_key=settings.WEAVIATE_API_KEY)
-    return weaviate.Client(url=settings.WEAVIATE_URL, auth_client_secret=auth)
+    """Devuelve un cliente Weaviate sin autenticación (modo anónimo)."""
+    return weaviate.Client(url=settings.WEAVIATE_URL)
+
 
 
 def load_documents_from_folder(folder_path: Path):
+    """Carga archivos .txt de una carpeta en una lista de diccionarios."""
     documents = []
     for file in folder_path.glob("*.txt"):
         with open(file, "r", encoding="utf-8") as f:
@@ -40,6 +39,7 @@ def load_documents_from_folder(folder_path: Path):
 
 
 def chunk_documents(documents, chunk_size=500, chunk_overlap=100):
+    """Divide los documentos en chunks usando un splitter recursivo."""
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap
@@ -60,12 +60,10 @@ def index_chunks(chunks, gpt_id="default"):
     - "LegalDocs" si gpt_id == "default"
     - "LegalDocs_<gpt_id>" en cualquier otro caso
     """
-    # Determinar nombre del índice según el GPT
     index_name = "LegalDocs" if gpt_id == "default" else f"LegalDocs_{gpt_id}"
-
     client = get_weaviate_client()
 
-    # Si la clase no existe aún en Weaviate, crearla
+    # Crear clase si no existe
     if not any(cls["class"] == index_name for cls in client.schema.get()["classes"]):
         class_obj = {
             "class": index_name,
@@ -96,4 +94,3 @@ def index_chunks(chunks, gpt_id="default"):
         texts=texts,
         metadatas=metadatas
     )
-
