@@ -145,6 +145,8 @@
 - Adaptación para retornar respuesta simulada (`USE_MOCK_MODE=true`) durante pruebas
 - Nueva variable `DEBUG_PRINT_CONTEXT=true` permite mostrar en consola el contexto
   enviado al LLM para depuración
+- Variables `MAX_CONTEXT_TOKENS` y `MAX_COMPLETION_TOKENS` permiten ajustar los
+  límites de tokens de contexto y respuesta al usar la API de OpenAI
     
 
 ---

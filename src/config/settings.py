@@ -60,3 +60,10 @@ DOCS_INPUT_PATH = os.getenv("DOCS_INPUT_PATH", "data/raw")
 # Esta ruta se usa para almacenar los fragmentos de documentos que se generarán a partir de los documentos de entrada
 # Estos chunks se usarán para la búsqueda y recuperación de información relevante
 DOCS_OUTPUT_PATH = os.getenv("DOCS_OUTPUT_PATH", "data/chunks")
+
+# Límite máximo de tokens a enviar como contexto al modelo
+MAX_CONTEXT_TOKENS = int(os.getenv("MAX_CONTEXT_TOKENS", "3000"))
+
+# Límite máximo de tokens generados por el modelo para cada respuesta
+MAX_COMPLETION_TOKENS = int(os.getenv("MAX_COMPLETION_TOKENS", "800"))
+
