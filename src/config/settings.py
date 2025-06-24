@@ -27,7 +27,7 @@ WEAVIATE_API_KEY = os.getenv("WEAVIATE_API_KEY")
 # Verifica si se debe usar un LLM local o uno remoto
 # Si USE_LOCAL_LLM es "true", se usará un modelo local, de lo contrario, se usará un modelo remoto
 # Esta variable se usa para decidir si se conecta a un modelo local o a la API de OpenAI
-USE_LOCAL_LLM = os.getenv("USE_LOCAL_LLM", "true").lower() == "true"
+USE_LOCAL_LLM = os.getenv("USE_LOCAL_LLM", "true").lower() == "false"
 LLM_MODEL_PATH = Path(os.getenv("LLM_MODEL_PATH", BASE_DIR / "models" / "mistral-7b-instruct-v0.1.Q4_K_M.gguf"))
 LLM_MODEL_URL = os.getenv("LLM_MODEL_URL", "http://localhost:8001")
 
@@ -81,8 +81,8 @@ DOCS_INPUT_PATH = os.getenv("DOCS_INPUT_PATH", "data/raw")
 DOCS_OUTPUT_PATH = os.getenv("DOCS_OUTPUT_PATH", "data/chunks")
 
 # Tamaño y solapamiento de los chunks para la indexación
-CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", "300"))
-CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "30"))
+CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", "400"))
+CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "50"))
 
 # Límite máximo de tokens a enviar como contexto al modelo
 MAX_CONTEXT_TOKENS = int(os.getenv("MAX_CONTEXT_TOKENS", "3000"))
