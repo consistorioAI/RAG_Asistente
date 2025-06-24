@@ -3,7 +3,7 @@ from pathlib import Path
 import io
 import fitz  # PyMuPDF
 import docx
-import uuid
+import hashlib
 import datetime
 
 from src.config import settings
@@ -57,6 +57,10 @@ def extract_text_from_bytes(filename: str, data: bytes) -> str:
     else:
         raise ValueError(f"Unsupported file type: {ext}")
 
+def compute_hash(data: bytes) -> str:
+    """Devuelve un hash SHA1 del contenido para identificarlo de forma estable."""
+    return hashlib.sha1(data).hexdigest()
+
 def process_documents(input_folder: Path, output_folder: Path) -> List[Dict]:
     """Procesa documentos locales y, opcionalmente, archivos remotos de OneDrive."""
     output_folder.mkdir(parents=True, exist_ok=True)
@@ -71,7 +75,7 @@ def process_documents(input_folder: Path, output_folder: Path) -> List[Dict]:
                 settings.ONEDRIVE_CLIENT_SECRET,
                 settings.ONEDRIVE_TENANT_ID,
             )
-            for name, data in client.iter_files(
+            for name, item_id, modified, data in client.iter_files(
                 drive_id=settings.ONEDRIVE_DRIVE_ID,
                 folder_path=settings.ONEDRIVE_FOLDER,
             ):
@@ -79,14 +83,15 @@ def process_documents(input_folder: Path, output_folder: Path) -> List[Dict]:
                     continue
                 print(f"Procesando remoto: {name}")
                 content = extract_text_from_bytes(name, data)
-                doc_id = str(uuid.uuid4())
+                file_hash = compute_hash(data)
                 metadata = {
-                    "doc_id": doc_id,
+                    "doc_id": file_hash,
                     "filename": name,
-                    "created": datetime.datetime.now().isoformat(),
+                    "created": modified or datetime.datetime.now().isoformat(),
                     "source": f"OneDrive:{settings.ONEDRIVE_FOLDER}/{name}",
+                    "onedrive_id": item_id,
                 }
-                with open(output_folder / f"{doc_id}.txt", "w", encoding="utf-8") as f_out:
+                with open(output_folder / f"{file_hash}.txt", "w", encoding="utf-8") as f_out:
                     f_out.write(content)
                 processed_docs.append({"text": content, "metadata": metadata})
         except Exception as e:
@@ -99,16 +104,17 @@ def process_documents(input_folder: Path, output_folder: Path) -> List[Dict]:
         print(f"Procesando: {file.name}")
         try:
             content = extract_text(file)
-            doc_id = str(uuid.uuid4())
+            data_bytes = content.encode("utf-8")
+            file_hash = compute_hash(data_bytes)
             metadata = {
-                "doc_id": doc_id,
+                "doc_id": file_hash,
                 "filename": file.name,
                 "created": datetime.datetime.now().isoformat(),
                 "source": str(file.resolve())
             }
 
 
-            with open(output_folder / f"{doc_id}.txt", "w", encoding="utf-8") as f_out:
+            with open(output_folder / f"{file_hash}.txt", "w", encoding="utf-8") as f_out:
                 f_out.write(content)
 
             processed_docs.append({"text": content, "metadata": metadata})

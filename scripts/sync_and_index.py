@@ -8,7 +8,7 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from src.config import settings
 from src.ingestion.ingestor import process_documents
-from src.vectorstore.embedder import index_chunks
+from src.vectorstore.embedder import index_chunks, chunk_documents
 
 # Ruta al archivo que lleva control de los documentos ya procesados
 TRACKER_FILE = Path("data/.processed_files.json")
@@ -43,17 +43,23 @@ def sync_and_index(gpt_id: str):
     # Procesar todos los documentos disponibles
     all_docs = process_documents(input_path, output_path)
 
-    # Filtrar aquellos que aún no se han indexado
+    # Filtrar aquellos que aún no se han indexado o fueron actualizados
     new_docs = []
     for doc in all_docs:
+        source = doc["metadata"]["source"]
         doc_id = doc["metadata"]["doc_id"]
-        if doc_id not in tracker:
+        if tracker.get(source) != doc_id:
             new_docs.append(doc)
-            tracker[doc_id] = doc["metadata"]
+            tracker[source] = doc_id
 
     if new_docs:
         print(f"\n🟢 Nuevos documentos detectados: {len(new_docs)}")
-        index_chunks(new_docs, gpt_id=gpt_id)
+        chunks = chunk_documents(
+            new_docs,
+            chunk_size=settings.CHUNK_SIZE,
+            chunk_overlap=settings.CHUNK_OVERLAP,
+        )
+        index_chunks(chunks, gpt_id=gpt_id)
         print("✅ Reindexado completado.")
     else:
         print("No hay documentos nuevos para indexar.")

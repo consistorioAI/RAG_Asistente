@@ -15,7 +15,11 @@ if __name__ == "__main__":
     input_folder = settings.DATA_CHUNKS_PATH
 
     docs = load_documents_from_folder(input_folder)
-    chunks = chunk_documents(docs)
+    chunks = chunk_documents(
+        docs,
+        chunk_size=settings.CHUNK_SIZE,
+        chunk_overlap=settings.CHUNK_OVERLAP,
+    )
 
     print(f"{len(docs)} documentos originales")
     print(f"{len(chunks)} chunks generados")

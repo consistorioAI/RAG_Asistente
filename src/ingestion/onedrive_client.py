@@ -63,10 +63,15 @@ class OneDriveClient:
         return response.content
 
     def iter_files(self, drive_id: str, folder_path: str):
-        """Itera sobre los archivos del folder y devuelve (nombre, bytes)."""
+        """Itera sobre los archivos y devuelve (nombre, id, modificado, bytes)."""
         for item in self.list_files(drive_id, folder_path):
             if "file" not in item:
                 continue
             data = self.get_file_bytes(drive_id, item["id"])
-            yield item["name"], data
+            yield (
+                item["name"],
+                item["id"],
+                item.get("lastModifiedDateTime"),
+                data,
+            )
 

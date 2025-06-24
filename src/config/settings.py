@@ -80,6 +80,10 @@ DOCS_INPUT_PATH = os.getenv("DOCS_INPUT_PATH", "data/raw")
 # Estos chunks se usarán para la búsqueda y recuperación de información relevante
 DOCS_OUTPUT_PATH = os.getenv("DOCS_OUTPUT_PATH", "data/chunks")
 
+# Tamaño y solapamiento de los chunks para la indexación
+CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", "300"))
+CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "30"))
+
 # Límite máximo de tokens a enviar como contexto al modelo
 MAX_CONTEXT_TOKENS = int(os.getenv("MAX_CONTEXT_TOKENS", "3000"))
 
