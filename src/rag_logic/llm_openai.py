@@ -6,5 +6,6 @@ def get_openai_llm():
     return ChatOpenAI(
         api_key=settings.OPENAI_API_KEY,
         model=settings.OPENAI_MODEL_NAME,
-        temperature=0.0
+        temperature=0.0,
+        max_tokens=settings.MAX_COMPLETION_TOKENS
     )

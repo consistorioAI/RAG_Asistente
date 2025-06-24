@@ -8,7 +8,6 @@ from transformers import BertTokenizer
 from langchain.prompts import PromptTemplate
 from src.config import settings
 from src.rag_logic.llm_openai import get_openai_llm
-from src.config import settings
 
 
 # Tokenizer para estimar tamaño de contexto
@@ -17,7 +16,7 @@ tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
 def estimate_tokens(text: str) -> int:
     return len(tokenizer.encode(text, truncation=False))
 
-def filter_docs_by_token_limit(docs, max_tokens: int = 3000):
+def filter_docs_by_token_limit(docs, max_tokens: int = settings.MAX_CONTEXT_TOKENS):
     total = 0
     selected = []
     for doc in docs:
@@ -55,7 +54,7 @@ def get_rag_chain(gpt_id: str = "default", k: int = 5):
 
     def run_rag(question: str):
         docs = retriever.get_relevant_documents(question)
-        docs = filter_docs_by_token_limit(docs, max_tokens=3000)
+        docs = filter_docs_by_token_limit(docs, max_tokens=settings.MAX_CONTEXT_TOKENS)
 
         if settings.DEBUG_PRINT_CONTEXT:
             print("\n[DEBUG] Contexto recuperado:")
