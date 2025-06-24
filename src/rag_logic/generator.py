@@ -41,7 +41,7 @@ def filter_docs_by_token_limit(docs, max_tokens: int = settings.MAX_CONTEXT_TOKE
 
 
 @lru_cache(maxsize=None)
-def get_rag_chain(gpt_id: str = "default", k: int = 5):
+def get_rag_chain(gpt_id: str = "default", k: int = settings.RETRIEVER_K):
     profile = GPT_PROFILES.get(gpt_id, GPT_PROFILES["default"])
 
     # Recuperador

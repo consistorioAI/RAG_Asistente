@@ -22,7 +22,7 @@ def _get_embedder():
     return HuggingFaceEmbeddings(model_name="BAAI/bge-small-en-v1.5")
 
 
-def get_retriever(k: int = 5, collection_name: str = "LegalDocs"):
+def get_retriever(k: int = settings.RETRIEVER_K, collection_name: str = "LegalDocs"):
     client = _get_weaviate_client()
     embedder = _get_embedder()
 

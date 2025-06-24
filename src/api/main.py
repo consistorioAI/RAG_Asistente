@@ -32,7 +32,7 @@ async def query(request: QueryRequest, valid: bool = Depends(verify_api_key)):
 
     try:
         
-        chain = get_rag_chain(gpt_id=request.gpt_id, k=5)
+        chain = get_rag_chain(gpt_id=request.gpt_id, k=settings.RETRIEVER_K)
         result = await run_in_threadpool(chain, request.question)
 
         sources = [
