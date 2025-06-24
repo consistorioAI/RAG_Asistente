@@ -18,7 +18,8 @@ def _get_weaviate_client():
 
 @lru_cache(maxsize=1)
 def _get_embedder():
-    return HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    """Return a cached embedder instance."""
+    return HuggingFaceEmbeddings(model_name="BAAI/bge-small-en-v1.5")
 
 
 def get_retriever(k: int = 5, collection_name: str = "LegalDocs"):
