@@ -32,6 +32,19 @@ USE_LOCAL_LLM = os.getenv("USE_LOCAL_LLM", "true").lower() == "true"
 # Este directorio se usa para sincronizar documentos desde OneDrive a la aplicación
 ONEDRIVE_PATH = Path(os.getenv("ONEDRIVE_PATH", BASE_DIR / "onedrive"))
 
+# Credenciales para conectar con OneDrive
+ONEDRIVE_CLIENT_ID = os.getenv("ONEDRIVE_CLIENT_ID")
+ONEDRIVE_CLIENT_SECRET = os.getenv("ONEDRIVE_CLIENT_SECRET")
+ONEDRIVE_TENANT_ID = os.getenv("ONEDRIVE_TENANT_ID")
+ONEDRIVE_DRIVE_ID = os.getenv("ONEDRIVE_DRIVE_ID")
+ONEDRIVE_FOLDER = os.getenv("ONEDRIVE_FOLDER", "")  # carpeta raíz por defecto
+
+# Habilita la descarga automática de archivos desde OneDrive
+USE_ONEDRIVE = os.getenv("USE_ONEDRIVE", "false").lower() == "true"
+
+# Futuro endpoint público (p.ej. URL de despliegue de la API)
+ENTRYPOINT_URL = os.getenv("ENTRYPOINT_URL")
+
 # Ruta a los documentos de entrada, donde se almacenarán los archivos originales para ingesta
 # Estos documentos se procesarán para crear los chunks y el índice
 DATA_RAW_PATH = Path(os.getenv("DATA_RAW_PATH", BASE_DIR / "data" / "raw"))

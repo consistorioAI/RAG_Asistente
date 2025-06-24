@@ -251,6 +251,16 @@
 ```
 (venv) PS C:\Users\ramon\Desktop\RAG_asistente> del data\chunks\*.txt (venv) PS C:\Users\ramon\Desktop\RAG_asistente> python scripts/delete_class.py Clase 'LegalDocs' eliminada de Weaviate. (venv) PS C:\Users\ramon\Desktop\RAG_asistente> del data\.processed_files.json (venv) PS C:\Users\ramon\Desktop\RAG_asistente> python scripts/sync_and_index.py --gpt_id default
 ```
+### **FASE 14: Sincronización opcional con OneDrive**
+
+- Creación del módulo `src/ingestion/onedrive_client.py` para autenticar y descargar documentos.
+- Nuevas variables de entorno en `settings.py`:
+  - `ONEDRIVE_CLIENT_ID`, `ONEDRIVE_CLIENT_SECRET`, `ONEDRIVE_TENANT_ID`
+  - `ONEDRIVE_DRIVE_ID`, `ONEDRIVE_FOLDER`
+  - `USE_ONEDRIVE` y `ENTRYPOINT_URL`
+- `process_documents` ahora, si `USE_ONEDRIVE=true`, lee los archivos directamente desde OneDrive sin guardarlos en `data/raw` y genera los chunks en `data/chunks`.
+- Para usar esta modalidad remota se debe configurar el `.env` con las credenciales anteriores. El cliente cuenta con un método `iter_files()` que devuelve `(nombre, bytes)` para cada documento.
+
 
 ---
 

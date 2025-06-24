@@ -1,9 +1,18 @@
 from typing import List, Dict
 from pathlib import Path
+import io
 import fitz  # PyMuPDF
 import docx
 import uuid
 import datetime
+
+from src.config import settings
+
+if settings.USE_ONEDRIVE:
+    try:
+        from .onedrive_client import OneDriveClient
+    except Exception:
+        OneDriveClient = None
 
 SUPPORTED_EXTENSIONS = [".pdf", ".docx", ".txt"]
 
@@ -32,9 +41,56 @@ def extract_text(file_path: Path) -> str:
     else:
         raise ValueError(f"Unsupported file type: {file_path.suffix}")
 
+def extract_text_from_bytes(filename: str, data: bytes) -> str:
+    ext = Path(filename).suffix.lower()
+    if ext == ".pdf":
+        doc = fitz.open(stream=data, filetype="pdf")
+        text = ""
+        for page in doc:
+            text += page.get_text()
+        return text
+    elif ext == ".docx":
+        doc = docx.Document(io.BytesIO(data))
+        return "\n".join([para.text for para in doc.paragraphs])
+    elif ext == ".txt":
+        return data.decode("utf-8")
+    else:
+        raise ValueError(f"Unsupported file type: {ext}")
+
 def process_documents(input_folder: Path, output_folder: Path) -> List[Dict]:
+    """Procesa documentos locales y, opcionalmente, archivos remotos de OneDrive."""
     output_folder.mkdir(parents=True, exist_ok=True)
+    input_folder.mkdir(parents=True, exist_ok=True)
+
     processed_docs = []
+
+    if settings.USE_ONEDRIVE and OneDriveClient:
+        try:
+            client = OneDriveClient(
+                settings.ONEDRIVE_CLIENT_ID,
+                settings.ONEDRIVE_CLIENT_SECRET,
+                settings.ONEDRIVE_TENANT_ID,
+            )
+            for name, data in client.iter_files(
+                drive_id=settings.ONEDRIVE_DRIVE_ID,
+                folder_path=settings.ONEDRIVE_FOLDER,
+            ):
+                if Path(name).suffix.lower() not in SUPPORTED_EXTENSIONS:
+                    continue
+                print(f"Procesando remoto: {name}")
+                content = extract_text_from_bytes(name, data)
+                doc_id = str(uuid.uuid4())
+                metadata = {
+                    "doc_id": doc_id,
+                    "filename": name,
+                    "created": datetime.datetime.now().isoformat(),
+                    "source": f"OneDrive:{settings.ONEDRIVE_FOLDER}/{name}",
+                }
+                with open(output_folder / f"{doc_id}.txt", "w", encoding="utf-8") as f_out:
+                    f_out.write(content)
+                processed_docs.append({"text": content, "metadata": metadata})
+        except Exception as e:
+            print(f"Error sincronizando OneDrive: {e}")
 
     for file in input_folder.iterdir():
         if file.suffix.lower() not in SUPPORTED_EXTENSIONS:
