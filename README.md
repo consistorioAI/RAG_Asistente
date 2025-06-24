@@ -213,6 +213,7 @@
 ### **FASE 12: Ajuste fino del chunking y reinicio limpio del sistema**
 
 - Cambio de `chunk_size` a 300 y `chunk_overlap` a 30 en `chunk_documents`
+- Nuevas variables de entorno `CHUNK_SIZE` y `CHUNK_OVERLAP` para ajustar estos valores
     
 - Limpieza completa del entorno:
     
@@ -243,11 +244,10 @@
         
     - Vuelve a trocear y reindexar solo lo nuevo
         
-- Control mediante archivo `.processed_files.json`
-    
-- Parametrización por `--gpt_id` para clasificar por GPT
-    
-- Listo para ejecución manual o futura automatización por `cron` / `Task Scheduler`
+ - Control mediante archivo `.processed_files.json`
+ - Parametrización por `--gpt_id` para clasificar por GPT
+ - Se calcula un hash por archivo para detectar cambios y evitar reindexados innecesarios
+ - Listo para ejecución manual o futura automatización por `cron` / `Task Scheduler`
     
 #### limpieza y reindexación
 ```
@@ -261,7 +261,7 @@
   - `ONEDRIVE_DRIVE_ID`, `ONEDRIVE_FOLDER`
   - `USE_ONEDRIVE` y `ENTRYPOINT_URL`
 - `process_documents` ahora, si `USE_ONEDRIVE=true`, lee los archivos directamente desde OneDrive sin guardarlos en `data/raw` y genera los chunks en `data/chunks`.
-- Para usar esta modalidad remota se debe configurar el `.env` con las credenciales anteriores. El cliente cuenta con un método `iter_files()` que devuelve `(nombre, bytes)` para cada documento.
+  - Para usar esta modalidad remota se debe configurar el `.env` con las credenciales anteriores. El cliente cuenta con un método `iter_files()` que devuelve `(nombre, id, modificado, bytes)` para cada documento.
 
 
 ---
