@@ -21,9 +21,19 @@ def _get_embedder():
     """Return a cached embedder instance."""
     return HuggingFaceEmbeddings(model_name="BAAI/bge-small-en-v1.5")
 
+def ensure_collection_exists(client, collection_name: str) -> None:
+    """Verifies that the collection exists in Weaviate."""
+    classes = [cls.get("class") for cls in client.schema.get().get("classes", [])]
+    if collection_name not in classes:
+        raise RuntimeError(
+            f"Colección '{collection_name}' no encontrada en Weaviate. "
+            "Ejecuta `scripts/sync_and_index.py --gpt_id <id>` antes de consultar."
+        )
+
 
 def get_retriever(k: int = settings.RETRIEVER_K, collection_name: str = "LegalDocs"):
     client = _get_weaviate_client()
+    ensure_collection_exists(client, collection_name)
     embedder = _get_embedder()
 
     vectorstore = Weaviate(
