@@ -76,9 +76,14 @@ def get_rag_chain(gpt_id: str = "default", k: int = settings.RETRIEVER_K):
                 print(doc.page_content)
                 print("Metadatos:", doc.metadata)
 
-        return combine_chain.run({
+        answer = combine_chain.run({
             "input_documents": docs,
             "question": question
         })
+
+        return {
+            "result": answer,
+            "source_documents": docs
+        }
 
     return run_rag
