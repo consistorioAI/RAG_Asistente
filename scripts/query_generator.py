@@ -60,8 +60,15 @@ if __name__ == "__main__":
             break
 
         try:
-            respuesta = chain(pregunta)
+            result = chain(pregunta)
             print("\nRespuesta generada:")
-            print(respuesta)
+            print(result["result"])
+
+            print("\nFuentes utilizadas:")
+            for i, doc in enumerate(result["source_documents"], 1):
+                print(f"\n--- Documento {i} ---")
+                print(doc.page_content[:500], "...")
+                print("Metadatos:", doc.metadata)
+
         except Exception as e:
             print(f"\n[Error durante la generación]: {e}")
