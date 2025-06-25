@@ -27,7 +27,7 @@ WEAVIATE_API_KEY = os.getenv("WEAVIATE_API_KEY")
 # Verifica si se debe usar un LLM local o uno remoto
 # Si USE_LOCAL_LLM es "true", se usará un modelo local, de lo contrario, se usará un modelo remoto
 # Esta variable se usa para decidir si se conecta a un modelo local o a la API de OpenAI
-USE_LOCAL_LLM = os.getenv("USE_LOCAL_LLM", "true").lower() == "false"
+USE_LOCAL_LLM = os.getenv("USE_LOCAL_LLM", "true").lower() == "true"
 LLM_MODEL_PATH = Path(os.getenv("LLM_MODEL_PATH", BASE_DIR / "models" / "mistral-7b-instruct-v0.1.Q4_K_M.gguf"))
 LLM_MODEL_URL = os.getenv("LLM_MODEL_URL", "http://localhost:8001")
 
@@ -43,7 +43,7 @@ ONEDRIVE_DRIVE_ID = os.getenv("ONEDRIVE_DRIVE_ID")
 ONEDRIVE_FOLDER = os.getenv("ONEDRIVE_FOLDER", "")  # carpeta raíz por defecto
 
 # Habilita la descarga automática de archivos desde OneDrive
-USE_ONEDRIVE = os.getenv("USE_ONEDRIVE", "false").lower() == "true"
+USE_ONEDRIVE = os.getenv("USE_ONEDRIVE", "false").lower() == "false"
 
 # Futuro endpoint público (p.ej. URL de despliegue de la API)
 ENTRYPOINT_URL = os.getenv("ENTRYPOINT_URL")
