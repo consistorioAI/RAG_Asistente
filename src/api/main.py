@@ -3,12 +3,24 @@ from fastapi.concurrency import run_in_threadpool
 from src.api.schemas import QueryRequest, QueryResponse, SourceDocument
 from src.rag_logic.generator import get_rag_chain
 from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 import traceback
 
 from src.config import settings  # <-- importar configuración del .env
 
 app = FastAPI(title="RAG API", description="API de consulta semántica legal", version="0.1.0")
+
+# Permitir el acceso a la API desde cualquier origen para que la 
+# documentación interactiva funcione correctamente cuando se accede 
+# de forma remota.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 def verify_api_key(x_api_key: str = Header(None)):
