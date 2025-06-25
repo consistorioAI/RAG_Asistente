@@ -162,8 +162,8 @@
 - Configuración de túnel público con `ngrok`
     
 - Automatización:
-    
-    - Script `run.py` que lanza ngrok, actualiza el YAML y abre 3 terminales (API, LLM, ngrok)
+
+    - Nuevo `run.py` inicia Weaviate con Docker Compose y arranca la API. Ejecutar `python run.py` para poner ambos servicios en marcha.
         
 - Validación de la función `queryLegal` desde GPT personalizado
     
