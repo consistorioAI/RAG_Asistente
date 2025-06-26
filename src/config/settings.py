@@ -43,7 +43,7 @@ ONEDRIVE_DRIVE_ID = os.getenv("ONEDRIVE_DRIVE_ID")
 ONEDRIVE_FOLDER = os.getenv("ONEDRIVE_FOLDER", "")  # carpeta raíz por defecto
 
 # Habilita la descarga automática de archivos desde OneDrive
-USE_ONEDRIVE = os.getenv("USE_ONEDRIVE", "false").lower() == "false"
+USE_ONEDRIVE = os.getenv("USE_ONEDRIVE", "false").lower() == "true"
 
 # Futuro endpoint público (p.ej. URL de despliegue de la API)
 ENTRYPOINT_URL = os.getenv("ENTRYPOINT_URL")
