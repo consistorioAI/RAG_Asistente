@@ -260,7 +260,8 @@
   - `ONEDRIVE_CLIENT_ID`, `ONEDRIVE_CLIENT_SECRET`, `ONEDRIVE_TENANT_ID`
   - `ONEDRIVE_DRIVE_ID`, `ONEDRIVE_FOLDER`
   - `USE_ONEDRIVE` y `ENTRYPOINT_URL`
-- `process_documents` ahora, si `USE_ONEDRIVE=true`, lee los archivos directamente desde OneDrive sin guardarlos en `data/raw` y genera los chunks en `data/chunks`.
+  - `USE_ONEDRIVE` es `false` por defecto; cámbialo a `true` para sincronizar documentos desde OneDrive
+  - `process_documents` ahora, si `USE_ONEDRIVE=true`, lee los archivos directamente desde OneDrive sin guardarlos en `data/raw` y genera los chunks en `data/chunks`.
   - Para usar esta modalidad remota se debe configurar el `.env` con las credenciales anteriores. El cliente cuenta con un método `iter_files()` que devuelve `(nombre, id, modificado, bytes)` para cada documento.
 
 
