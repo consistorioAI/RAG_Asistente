@@ -11,6 +11,10 @@ if __name__ == "__main__":
     input_path = settings.DATA_RAW_PATH
     output_path = settings.DATA_CHUNKS_PATH
 
-    docs = process_documents(input_path, output_path)
+    docs = process_documents(
+        input_path,
+        output_path,
+        save_to_disk=not settings.USE_ONEDRIVE,
+    )
 
     print(f"\n{len(docs)} documentos procesados.")

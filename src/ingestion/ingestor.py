@@ -61,9 +61,14 @@ def compute_hash(data: bytes) -> str:
     """Devuelve un hash SHA1 del contenido para identificarlo de forma estable."""
     return hashlib.sha1(data).hexdigest()
 
-def process_documents(input_folder: Path, output_folder: Path) -> List[Dict]:
-    """Procesa documentos locales y, opcionalmente, archivos remotos de OneDrive."""
-    output_folder.mkdir(parents=True, exist_ok=True)
+def process_documents(input_folder: Path, output_folder: Path, save_to_disk: bool = True) -> List[Dict]:
+    """Procesa documentos locales y, opcionalmente, archivos remotos de OneDrive.
+
+    Si ``save_to_disk`` es ``False`` los textos extraídos no se guardan en
+    ``output_folder`` y solo se devuelven en memoria.
+    """
+    if save_to_disk:
+        output_folder.mkdir(parents=True, exist_ok=True)
     input_folder.mkdir(parents=True, exist_ok=True)
 
     processed_docs = []
@@ -91,8 +96,9 @@ def process_documents(input_folder: Path, output_folder: Path) -> List[Dict]:
                     "source": f"OneDrive:{settings.ONEDRIVE_FOLDER}/{name}",
                     "onedrive_id": item_id,
                 }
-                with open(output_folder / f"{file_hash}.txt", "w", encoding="utf-8") as f_out:
-                    f_out.write(content)
+                if save_to_disk:
+                    with open(output_folder / f"{file_hash}.txt", "w", encoding="utf-8") as f_out:
+                        f_out.write(content)
                 processed_docs.append({"text": content, "metadata": metadata})
         except Exception as e:
             print(f"Error sincronizando OneDrive: {e}")
@@ -114,8 +120,9 @@ def process_documents(input_folder: Path, output_folder: Path) -> List[Dict]:
             }
 
 
-            with open(output_folder / f"{file_hash}.txt", "w", encoding="utf-8") as f_out:
-                f_out.write(content)
+            if save_to_disk:
+                with open(output_folder / f"{file_hash}.txt", "w", encoding="utf-8") as f_out:
+                    f_out.write(content)
 
             processed_docs.append({"text": content, "metadata": metadata})
 
