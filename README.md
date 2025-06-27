@@ -263,6 +263,8 @@
   - `USE_ONEDRIVE` es `false` por defecto; cámbialo a `true` para sincronizar documentos desde OneDrive
   - `process_documents` ahora, si `USE_ONEDRIVE=true`, lee los archivos directamente desde OneDrive sin guardarlos en `data/raw` y genera los chunks en `data/chunks`.
   - Para usar esta modalidad remota se debe configurar el `.env` con las credenciales anteriores. El cliente cuenta con un método `iter_files()` que devuelve `(nombre, id, modificado, bytes)` para cada documento.
+  - Se añade un ejemplo de configuración en `*.env.example`.
+  - Nuevo script `scripts/check_onedrive.py` para verificar la conectividad listando el contenido de la ruta configurada.
 
 
 ---

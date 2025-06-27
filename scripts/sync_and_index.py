@@ -41,7 +41,11 @@ def sync_and_index(gpt_id: str):
     tracker = load_tracker()
 
     # Procesar todos los documentos disponibles
-    all_docs = process_documents(input_path, output_path)
+    all_docs = process_documents(
+        input_path,
+        output_path,
+        save_to_disk=not settings.USE_ONEDRIVE,
+    )
 
     # Filtrar aquellos que aún no se han indexado o fueron actualizados
     new_docs = []
