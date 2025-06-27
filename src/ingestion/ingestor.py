@@ -83,6 +83,7 @@ def process_documents(input_folder: Path, output_folder: Path, save_to_disk: boo
             for name, item_id, modified, data in client.iter_files(
                 drive_id=settings.ONEDRIVE_DRIVE_ID,
                 folder_path=settings.ONEDRIVE_FOLDER,
+                recursive=True,
             ):
                 if Path(name).suffix.lower() not in SUPPORTED_EXTENSIONS:
                     continue

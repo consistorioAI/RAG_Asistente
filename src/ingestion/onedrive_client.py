@@ -78,14 +78,20 @@ class OneDriveClient:
         resp.raise_for_status()
         return resp.content
 
-    def iter_files(self, drive_id: str, folder_path: str):
-        """Iterador que devuelve (nombre, id, fecha_mod, bytes)."""
+    def iter_files(self, drive_id: str, folder_path: str, recursive: bool = False):
+        """Iterador que devuelve (nombre, id, fecha_mod, bytes).
+
+        Si ``recursive`` es ``True`` también recorre subcarpetas de forma
+        recursiva siguiendo una búsqueda en profundidad.
+        """
         for item in self.list_files(drive_id, folder_path):
-            if "file" not in item:
-                continue
-            yield (
-                item["name"],
-                item["id"],
-                item.get("lastModifiedDateTime"),
-                self.get_file_bytes(drive_id, item["id"]),
-            )
+            if "file" in item:
+                yield (
+                    item["name"],
+                    item["id"],
+                    item.get("lastModifiedDateTime"),
+                    self.get_file_bytes(drive_id, item["id"]),
+                )
+            elif recursive and "folder" in item:
+                sub_path = f"{folder_path}/{item['name']}".strip("/")
+                yield from self.iter_files(drive_id, sub_path, recursive=True)
