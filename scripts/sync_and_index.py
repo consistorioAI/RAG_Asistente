@@ -44,7 +44,7 @@ def sync_and_index(gpt_id: str):
     all_docs = process_documents(
         input_path,
         output_path,
-        save_to_disk=not settings.USE_ONEDRIVE,
+        save_to_disk=True,
     )
 
     # Filtrar aquellos que aún no se han indexado o fueron actualizados

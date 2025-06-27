@@ -14,7 +14,8 @@ if __name__ == "__main__":
     docs = process_documents(
         input_path,
         output_path,
-        save_to_disk=not settings.USE_ONEDRIVE,
+        # save_to_disk=not settings.USE_ONEDRIVE,
+	save_to_disk=True
     )
 
     print(f"\n{len(docs)} documentos procesados.")
