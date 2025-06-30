@@ -30,6 +30,8 @@ WEAVIATE_API_KEY = os.getenv("WEAVIATE_API_KEY")
 USE_LOCAL_LLM = os.getenv("USE_LOCAL_LLM", "true").lower() == "true"
 LLM_MODEL_PATH = Path(os.getenv("LLM_MODEL_PATH", BASE_DIR / "models" / "mistral-7b-instruct-v0.1.Q4_K_M.gguf"))
 LLM_MODEL_URL = os.getenv("LLM_MODEL_URL", "http://localhost:8001")
+# Dispositivo para generar los embeddings locales ("cpu" o "cuda")
+EMBEDDING_DEVICE = os.getenv("EMBEDDING_DEVICE", "cpu")
 
 # Ruta al directorio de OneDrive, donde se almacenarán los documentos legales
 # Este directorio se usa para sincronizar documentos desde OneDrive a la aplicación
