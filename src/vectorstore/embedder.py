@@ -1,5 +1,5 @@
 from pathlib import Path
-import weaviate  # Cliente v3
+from weaviate import WeaviateClient  # Cliente v4
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Weaviate
 # from langchain_huggingface import HuggingFaceEmbeddings
@@ -22,7 +22,7 @@ def get_local_embedder():
 @lru_cache(maxsize=1)
 def get_weaviate_client():
     """Devuelve un cliente Weaviate sin autenticación (modo anónimo)."""
-    return weaviate.Client(url=settings.WEAVIATE_URL)
+    return WeaviateClient(url=settings.WEAVIATE_URL)
 
 
 
@@ -67,8 +67,8 @@ def index_chunks(chunks, gpt_id="default"):
     index_name = "LegalDocs" if gpt_id == "default" else f"LegalDocs_{gpt_id}"
     client = get_weaviate_client()
 
-    # Crear clase si no existe
-    if not any(cls["class"] == index_name for cls in client.schema.get()["classes"]):
+    # Crear colección si no existe
+    if not client.collections.exists(index_name):
         class_obj = {
             "class": index_name,
             "vectorizer": "none",
@@ -80,7 +80,7 @@ def index_chunks(chunks, gpt_id="default"):
                 {"name": "source", "dataType": ["text"]}
             ]
         }
-        client.schema.create_class(class_obj)
+        client.collections.create(class_obj)
 
     embedder = get_local_embedder()
     texts = [chunk["text"] for chunk in chunks]

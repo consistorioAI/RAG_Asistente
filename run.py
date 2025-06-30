@@ -23,7 +23,7 @@ from pathlib import Path
 from typing import Optional
 
 import psutil
-import weaviate
+from weaviate import WeaviateClient
 
 # Configuración
 WEAVIATE_URL = os.getenv("WEAVIATE_URL", "http://localhost:8080")
@@ -46,7 +46,7 @@ def is_weaviate_running() -> bool:
 
 def wait_for_weaviate(url: str, timeout: int) -> None:
     """Espera hasta que Weaviate responda o se agote el tiempo."""
-    client = weaviate.Client(url)
+    client = WeaviateClient(url)
     start_time = time.time()
     while True:
         try:
