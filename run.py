@@ -46,7 +46,7 @@ def is_weaviate_running() -> bool:
 
 def wait_for_weaviate(url: str, timeout: int) -> None:
     """Espera hasta que Weaviate responda o se agote el tiempo."""
-    client = WeaviateClient(url)
+    client = WeaviateClient(url=url)
     start_time = time.time()
     while True:
         try:
