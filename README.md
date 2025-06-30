@@ -29,7 +29,9 @@
 - Creación de metadatos asociados: nombre de archivo, ruta, fecha
     
 - Script de ejecución: `scripts/ingest_local_docs.py`
-    
+- La lectura local ahora recorre `data/raw` y todas sus subcarpetas de forma
+  recursiva
+
 - Verificación de extracción correcta en entorno local
     
 
