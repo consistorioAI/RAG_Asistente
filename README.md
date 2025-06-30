@@ -42,8 +42,7 @@
 - División de los documentos en chunks usando `RecursiveCharacterTextSplitter`
     
 - Uso de embeddings locales con modelo `BAAI/bge-small-en-v1.5`
-- Para acelerar la generación de embeddings se puede configurar `EMBEDDING_DEVICE=cuda` en `.env`
-    
+- Para acelerar la generación de embeddings se puede configurar `EMBEDDING_DEVICE=cuda` y ajustar `BATCH_SIZE` en `.env`
 - Downgrade del cliente `weaviate-client` a versión 3.26.7 (por incompatibilidad con LangChain y cliente v4)
     
 - Ajustes en el schema de Weaviate:
@@ -54,7 +53,7 @@
         
     - Verificación de existencia de clase usando `client.schema.get()["classes"]`
         
-- Indexación exitosa de los vectores en Weaviate vía `langchain_community.vectorstores.Weaviate`
+- Indexación exitosa de los vectores en Weaviate vía `langchain_weaviate.WeaviateVectorStore`
     
 - Script de ejecución: `scripts/index_chunks.py`
     

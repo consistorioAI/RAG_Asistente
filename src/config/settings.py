@@ -32,6 +32,7 @@ LLM_MODEL_PATH = Path(os.getenv("LLM_MODEL_PATH", BASE_DIR / "models" / "mistral
 LLM_MODEL_URL = os.getenv("LLM_MODEL_URL", "http://localhost:8001")
 # Dispositivo para generar los embeddings locales ("cpu" o "cuda")
 EMBEDDING_DEVICE = os.getenv("EMBEDDING_DEVICE", "cpu")
+BATCH_SIZE = int(os.getenv("BATCH_SIZE", "64"))
 
 # Ruta al directorio de OneDrive, donde se almacenarán los documentos legales
 # Este directorio se usa para sincronizar documentos desde OneDrive a la aplicación

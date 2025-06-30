@@ -2,7 +2,9 @@ from pathlib import Path
 import weaviate  # Cliente v3
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Weaviate
+# from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_weaviate import WeaviateVectorStore
 from src.config import settings
 from weaviate.auth import AuthApiKey
 from functools import lru_cache
@@ -13,7 +15,8 @@ def get_local_embedder():
     """Devuelve un modelo de embedding local (BAAI/bge-small-en-v1.5)."""
     return HuggingFaceEmbeddings(
         model_name="BAAI/bge-small-en-v1.5",
-        model_kwargs={"device": settings.EMBEDDING_DEVICE}
+        model_kwargs={"device": settings.EMBEDDING_DEVICE},
+        encode_kwargs={"batch_size": settings.BATCH_SIZE},
     )
 
 @lru_cache(maxsize=1)
@@ -83,7 +86,7 @@ def index_chunks(chunks, gpt_id="default"):
     texts = [chunk["text"] for chunk in chunks]
     metadatas = [chunk["metadata"] for chunk in chunks]
 
-    vectorstore = Weaviate(
+    vectorstore = WeaviateVectorStore(
         client=client,
         index_name=index_name,
         embedding=embedder,
