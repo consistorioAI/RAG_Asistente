@@ -60,8 +60,8 @@ def sync_and_index(gpt_id: str):
         print(f"\n🟢 Nuevos documentos detectados: {len(new_docs)}")
         chunks = chunk_documents(
             new_docs,
-            chunk_size=settings.CHUNK_SIZE,
-            chunk_overlap=settings.CHUNK_OVERLAP,
+            size=settings.CHUNK_SIZE,
+            overlap=settings.CHUNK_OVERLAP,
         )
         index_chunks(chunks, gpt_id=gpt_id)
         print("✅ Reindexado completado.")

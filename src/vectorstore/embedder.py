@@ -1,100 +1,79 @@
+# ── imports ───────────────────────
 from pathlib import Path
-from weaviate import WeaviateClient  # Cliente v4
-from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_community.vectorstores import Weaviate
-# from langchain_huggingface import HuggingFaceEmbeddings
+from functools import lru_cache
+from urllib.parse import urlparse
+
+from weaviate import connect_to_custom, WeaviateClient
+from weaviate.classes.config import (
+    Configure, Property, DataType
+)
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_weaviate import WeaviateVectorStore
 from src.config import settings
-from weaviate.auth import AuthApiKey
-from functools import lru_cache
-import os
 
+_GRPC_PORT = 50051
 
+# ── embeddings ────────────────────
 def get_local_embedder():
-    """Devuelve un modelo de embedding local (BAAI/bge-small-en-v1.5)."""
     return HuggingFaceEmbeddings(
         model_name="BAAI/bge-small-en-v1.5",
         model_kwargs={"device": settings.EMBEDDING_DEVICE},
         encode_kwargs={"batch_size": settings.BATCH_SIZE},
     )
 
+# ── Weaviate client ───────────────
 @lru_cache(maxsize=1)
-def get_weaviate_client():
-    """Devuelve un cliente Weaviate sin autenticación (modo anónimo)."""
-    return WeaviateClient(url=settings.WEAVIATE_URL)
+def get_weaviate_client() -> WeaviateClient:
+    parsed = urlparse(settings.WEAVIATE_URL)
+    host, secure = parsed.hostname or "localhost", parsed.scheme == "https"
+    http_port = parsed.port or (443 if secure else 80)
 
-
-
-def load_documents_from_folder(folder_path: Path):
-    """Carga archivos .txt de una carpeta en una lista de diccionarios."""
-    documents = []
-    for file in folder_path.glob("*.txt"):
-        with open(file, "r", encoding="utf-8") as f:
-            content = f.read()
-        documents.append({
-            "text": content,
-            "metadata": {
-                "filename": file.name,
-                "path": str(file.resolve())
-            }
-        })
-    return documents
-
-
-def chunk_documents(documents, chunk_size=500, chunk_overlap=100):
-    """Divide los documentos en chunks usando un splitter recursivo."""
-    splitter = RecursiveCharacterTextSplitter(
-        chunk_size=chunk_size,
-        chunk_overlap=chunk_overlap
+    client = connect_to_custom(
+        host, http_port=http_port, http_secure=secure,
+        grpc_host=host, grpc_port=_GRPC_PORT, grpc_secure=secure,
     )
-    chunks = []
-    for doc in documents:
-        texts = splitter.split_text(doc["text"])
-        for t in texts:
-            chunks.append({"text": t, "metadata": doc["metadata"]})
-    return chunks
+    client.connect()
+    return client
 
+# ── utils ─────────────────────────
+def load_documents_from_folder(folder: Path):
+    return [
+        {"text": p.read_text(encoding="utf-8"),
+         "metadata": {"filename": p.name, "path": str(p.resolve())}}
+        for p in folder.glob("*.txt")
+    ]
 
+def chunk_documents(docs, size=500, overlap=100):
+    splitter = RecursiveCharacterTextSplitter(chunk_size=size, chunk_overlap=overlap)
+    return [
+        {"text": chunk, "metadata": doc["metadata"]}
+        for doc in docs for chunk in splitter.split_text(doc["text"])
+    ]
+
+# ── indexing ──────────────────────
 def index_chunks(chunks, gpt_id="default"):
-    """
-    Indexa los chunks en la base vectorial Weaviate.
-
-    El nombre de la clase de Weaviate será:
-    - "LegalDocs" si gpt_id == "default"
-    - "LegalDocs_<gpt_id>" en cualquier otro caso
-    """
     index_name = "LegalDocs" if gpt_id == "default" else f"LegalDocs_{gpt_id}"
     client = get_weaviate_client()
 
-    # Crear colección si no existe
     if not client.collections.exists(index_name):
-        class_obj = {
-            "class": index_name,
-            "vectorizer": "none",
-            "properties": [
-                {"name": "text", "dataType": ["text"]},
-                {"name": "doc_id", "dataType": ["text"]},
-                {"name": "filename", "dataType": ["text"]},
-                {"name": "created", "dataType": ["text"]},
-                {"name": "source", "dataType": ["text"]}
-            ]
-        }
-        client.collections.create(class_obj)
+        client.collections.create(
+            index_name,
+            properties=[
+                Property(name="text",     data_type=DataType.TEXT),
+                Property(name="filename", data_type=DataType.TEXT),
+                Property(name="path",     data_type=DataType.TEXT),
+            ],
+            vectorizer_config=Configure.Vectorizer.none(),  #  ✅ cambio clave
+        )
 
-    embedder = get_local_embedder()
-    texts = [chunk["text"] for chunk in chunks]
-    metadatas = [chunk["metadata"] for chunk in chunks]
-
-    vectorstore = WeaviateVectorStore(
+    store = WeaviateVectorStore(
         client=client,
         index_name=index_name,
-        embedding=embedder,
+        embedding=get_local_embedder(),
         text_key="text",
-        by_text=False
     )
+    store.add_texts(texts=[c["text"] for c in chunks],
+                    metadatas=[c["metadata"] for c in chunks])
 
-    vectorstore.add_texts(
-        texts=texts,
-        metadatas=metadatas
-    )
+    client.close()
