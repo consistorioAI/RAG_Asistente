@@ -104,8 +104,8 @@ def process_documents(input_folder: Path, output_folder: Path, save_to_disk: boo
         except Exception as e:
             print(f"Error sincronizando OneDrive: {e}")
 
-    for file in input_folder.iterdir():
-        if file.suffix.lower() not in SUPPORTED_EXTENSIONS:
+    for file in input_folder.rglob("*"):
+        if not file.is_file() or file.suffix.lower() not in SUPPORTED_EXTENSIONS:
             continue
 
         print(f"Procesando: {file.name}")
