@@ -5,7 +5,7 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 from weaviate import WeaviateClient
 from src.config import settings
 
-client = WeaviateClient(settings.WEAVIATE_URL)
+client = WeaviateClient(url=settings.WEAVIATE_URL)
 
 CLASS_NAME = "LegalDocs"
 
