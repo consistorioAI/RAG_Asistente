@@ -272,6 +272,18 @@
 
 ---
 
+### **FASE 15: Optimización y transición a Weaviate v4**
+
+- Refactor completo de los scripts para el cliente `weaviate-client` 4.x usando `connect_to_custom`.
+- Definición del puerto gRPC (`50051`) y cierre explícito de las conexiones.
+- `embedder.py` crea las colecciones con `vectorizer_config=Configure.Vectorizer.none()` y añade textos mediante `WeaviateVectorStore`.
+- `retriever_module.py`, `index_chunks.py` y `sync_and_index.py` se adaptan a la nueva API.
+- Mejora del script `run.py` para lanzar Weaviate y la API comprobando puertos libres y mostrando mensajes de estado.
+- Actualización de utilidades (`delete_class.py`, `list_embeddings.py`, `show_classes.py`) para listar y gestionar colecciones con la nueva sintaxis.
+
+
+---
+
 ### **PENDIENTE ACTUAL**
 
 -  Validar resultados tras nueva indexación con consulta ejemplo
