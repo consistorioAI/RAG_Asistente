@@ -6,7 +6,7 @@ from langchain_community.vectorstores import Weaviate
 from langchain_weaviate import WeaviateVectorStore
 
 from src.config import settings
-import weaviate
+from weaviate import WeaviateClient
 from weaviate.auth import AuthApiKey
 from functools import lru_cache
 
@@ -16,7 +16,7 @@ def _get_weaviate_client():
     auth = None
     if settings.WEAVIATE_API_KEY:
         auth = AuthApiKey(api_key=settings.WEAVIATE_API_KEY)
-    return weaviate.Client(url=settings.WEAVIATE_URL, auth_client_secret=auth)
+    return WeaviateClient(url=settings.WEAVIATE_URL, auth_client_secret=auth)
 
 
 @lru_cache(maxsize=1)
@@ -29,8 +29,7 @@ def _get_embedder():
 
 def ensure_collection_exists(client, collection_name: str) -> None:
     """Verifies that the collection exists in Weaviate."""
-    classes = [cls.get("class") for cls in client.schema.get().get("classes", [])]
-    if collection_name not in classes:
+    if not client.collections.exists(collection_name):
         raise RuntimeError(
             f"Colección '{collection_name}' no encontrada en Weaviate. "
             "Ejecuta `scripts/sync_and_index.py --gpt_id <id>` antes de consultar."
