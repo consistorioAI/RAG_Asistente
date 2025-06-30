@@ -43,7 +43,7 @@
     
 - Uso de embeddings locales con modelo `BAAI/bge-small-en-v1.5`
 - Para acelerar la generación de embeddings se puede configurar `EMBEDDING_DEVICE=cuda` y ajustar `BATCH_SIZE` en `.env`
-- Downgrade del cliente `weaviate-client` a versión 3.26.7 (por incompatibilidad con LangChain y cliente v4)
+# Weaviate connection (probado con weaviate-client v4.x)
     
 - Ajustes en el schema de Weaviate:
     
