@@ -12,7 +12,8 @@ import os
 def get_local_embedder():
     """Devuelve un modelo de embedding local (BAAI/bge-small-en-v1.5)."""
     return HuggingFaceEmbeddings(
-        model_name="BAAI/bge-small-en-v1.5"
+        model_name="BAAI/bge-small-en-v1.5",
+        model_kwargs={"device": settings.EMBEDDING_DEVICE}
     )
 
 @lru_cache(maxsize=1)
