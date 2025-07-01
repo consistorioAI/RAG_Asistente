@@ -53,6 +53,7 @@ def sync_and_index(gpt_id: str):
         input_path,
         output_path,
         save_to_disk=True,
+        tracker=tracker,
     )
 
     # Filtrar aquellos que aún no han sido chunkificados o cuyo contenido cambió
