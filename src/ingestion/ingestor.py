@@ -95,12 +95,7 @@ def process_documents(
                 if Path(name).suffix.lower() not in SUPPORTED_EXTENSIONS:
                     continue
 
-                source = f"OneDrive:{settings.ONEDRIVE_FOLDER}/{name}"
-                if tracker:
-                    entry = tracker.get(source)
-                    if entry and entry.get("chunked") and entry.get("indexed"):
-                        # Documento remoto ya procesado por completo
-                        continue
+
 
                 print(f"Procesando remoto: {name}")
                 content = extract_text_from_bytes(name, data)
@@ -109,7 +104,7 @@ def process_documents(
                     "doc_id": file_hash,
                     "filename": name,
                     "created": modified or datetime.datetime.now().isoformat(),
-                    "source": source,
+                    "source": f"OneDrive:{settings.ONEDRIVE_FOLDER}/{name}",
                     "onedrive_id": item_id,
                 }
                 if save_to_disk:
