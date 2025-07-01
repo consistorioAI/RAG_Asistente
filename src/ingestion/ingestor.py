@@ -61,11 +61,18 @@ def compute_hash(data: bytes) -> str:
     """Devuelve un hash SHA1 del contenido para identificarlo de forma estable."""
     return hashlib.sha1(data).hexdigest()
 
-def process_documents(input_folder: Path, output_folder: Path, save_to_disk: bool = True) -> List[Dict]:
+def process_documents(
+    input_folder: Path,
+    output_folder: Path,
+    save_to_disk: bool = True,
+    tracker: dict | None = None,
+) -> List[Dict]:
     """Procesa documentos locales y, opcionalmente, archivos remotos de OneDrive.
 
     Si ``save_to_disk`` es ``False`` los textos extraídos no se guardan en
     ``output_folder`` y solo se devuelven en memoria.
+    Cuando se pasa ``tracker`` se omiten los archivos locales ya procesados
+    (marcados como ``chunked`` e ``indexed``) para evitar releerlos.
     """
     if save_to_disk:
         output_folder.mkdir(parents=True, exist_ok=True)
@@ -107,6 +114,13 @@ def process_documents(input_folder: Path, output_folder: Path, save_to_disk: boo
     for file in input_folder.rglob("*"):
         if not file.is_file() or file.suffix.lower() not in SUPPORTED_EXTENSIONS:
             continue
+
+        source = str(file.resolve())
+        if tracker:
+            entry = tracker.get(source)
+            if entry and entry.get("chunked") and entry.get("indexed"):
+                # Documento ya procesado por completo
+                continue
 
         print(f"Procesando: {file.name}")
         try:
