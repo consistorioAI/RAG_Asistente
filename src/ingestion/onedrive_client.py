@@ -1,7 +1,8 @@
 import json
+import time
 from pathlib import Path
 import requests
-from msal import ConfidentialClientApplication
+from msal import ConfidentialClientApplication, SerializableTokenCache
 
 
 class OneDriveClient:
@@ -14,20 +15,22 @@ class OneDriveClient:
         self.scopes = ["https://graph.microsoft.com/.default"]
         self.base_url = "https://graph.microsoft.com/v1.0"
 
-        # Guarda el dict completo con metadatos y el access_token por separado
-        self.token_info = self._authenticate()
-        self.token = self.token_info["access_token"]
+        # ---- MSAL application & token cache ----
+        cache = SerializableTokenCache()
+        self._app = ConfidentialClientApplication(
+            client_id=self.client_id,
+            client_credential=self.client_secret,
+            authority=f"https://login.microsoftonline.com/{self.tenant_id}",
+            token_cache=cache,
+        )
+
+        self._token: dict | None = None
+        self._token_exp: float = 0.0
 
     # ---------- Autenticación -------------------------------------------------
     def _authenticate(self) -> dict:
         print("🔐  Autenticando con MSAL...")
-        app = ConfidentialClientApplication(
-            client_id=self.client_id,
-            client_credential=self.client_secret,
-            authority=f"https://login.microsoftonline.com/{self.tenant_id}",
-        )
-
-        result = app.acquire_token_for_client(scopes=self.scopes)
+        result = self._app.acquire_token_for_client(scopes=self.scopes)
         print("   Resultado token:", json.dumps(result, indent=2)[:400], "…")
 
         if "access_token" not in result:
@@ -37,11 +40,22 @@ class OneDriveClient:
         print("✅  Token OK, expira en:", result.get("expires_in"), "seg")
         return result
 
+    def _get_token(self) -> str:
+        """Devuelve un access-token válido refrescándolo si es necesario."""
+        if time.time() > self._token_exp - 300:
+            token_info = self._authenticate()
+            self._token = token_info["access_token"]
+            self._token_exp = time.time() + token_info.get("expires_in", 0)
+        return self._token
+
+    def _headers(self) -> dict:
+        return {"Authorization": f"Bearer {self._get_token()}"}
+
     # ---------- Operaciones de ficheros --------------------------------------
     def list_files(self, drive_id: str, folder_path: str):
         """Lista los elementos de la carpeta."""
         url = f"{self.base_url}/drives/{drive_id}/root:/{folder_path}:/children"
-        headers = {"Authorization": f"Bearer {self.token}"}
+        headers = self._headers()
 
         print(f"🌐  GET {url}")
         resp = requests.get(url, headers=headers)
@@ -73,7 +87,7 @@ class OneDriveClient:
     def get_file_bytes(self, drive_id: str, item_id: str) -> bytes:
         """Obtiene el contenido binario de un archivo dado su item_id."""
         url = f"{self.base_url}/drives/{drive_id}/items/{item_id}/content"
-        headers = {"Authorization": f"Bearer {self.token}"}
+        headers = self._headers()
         resp = requests.get(url, headers=headers)
         resp.raise_for_status()
         return resp.content
