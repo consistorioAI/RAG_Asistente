@@ -49,4 +49,4 @@ paths:
       - ApiKeyAuth: []
       summary: Consultar el sistema RAG
 servers:
-- url: https://cc85-185-187-243-197.ngrok-free.app
+- url: http://158.158.16.45:8000
