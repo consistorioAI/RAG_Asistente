@@ -45,6 +45,10 @@ ONEDRIVE_TENANT_ID = os.getenv("ONEDRIVE_TENANT_ID")
 ONEDRIVE_DRIVE_ID = os.getenv("ONEDRIVE_DRIVE_ID")
 ONEDRIVE_FOLDER = os.getenv("ONEDRIVE_FOLDER", "")  # carpeta raíz por defecto
 
+# Configuración de reintentos para el cliente de OneDrive
+ONEDRIVE_MAX_RETRIES = int(os.getenv("ONEDRIVE_MAX_RETRIES", "3"))
+ONEDRIVE_RETRY_DELAY = float(os.getenv("ONEDRIVE_RETRY_DELAY", "2"))
+
 # Habilita la descarga automática de archivos desde OneDrive
 USE_ONEDRIVE = os.getenv("USE_ONEDRIVE", "false").lower() == "true"
 
