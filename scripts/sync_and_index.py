@@ -14,18 +14,26 @@ from src.vectorstore.embedder import index_chunks, chunk_documents
 TRACKER_FILE = Path("data/.processed_files.json")
 
 def load_tracker():
+    """Carga el archivo de seguimiento.
+
+    A partir de la versión actual se almacena un diccionario con el
+    ``doc_id`` y un indicador ``chunked``. Para mantener compatibilidad con
+    versiones anteriores, si el valor es una cadena se asume que el documento
+    ya estaba procesado y troceado.
     """
-    Carga el archivo de seguimiento que contiene los IDs de los documentos
-    que ya han sido procesados e indexados.
-    """
-    if TRACKER_FILE.exists():
-        return json.loads(TRACKER_FILE.read_text(encoding="utf-8"))
-    return {}
+    if not TRACKER_FILE.exists():
+        return {}
+
+    data = json.loads(TRACKER_FILE.read_text(encoding="utf-8"))
+
+    for src, val in data.items():
+        if isinstance(val, str):
+            data[src] = {"doc_id": val, "chunked": True, "indexed": True}
+
+    return data
 
 def save_tracker(tracker):
-    """
-    Guarda el diccionario actualizado de documentos procesados en disco.
-    """
+    """Guarda el diccionario actualizado de documentos procesados en disco."""
     TRACKER_FILE.write_text(json.dumps(tracker, indent=2), encoding="utf-8")
 
 def sync_and_index(gpt_id: str):
@@ -47,14 +55,22 @@ def sync_and_index(gpt_id: str):
         save_to_disk=True,
     )
 
-    # Filtrar aquellos que aún no se han indexado o fueron actualizados
+    # Filtrar aquellos que aún no han sido chunkificados o cuyo contenido cambió
     new_docs = []
     for doc in all_docs:
         source = doc["metadata"]["source"]
         doc_id = doc["metadata"]["doc_id"]
-        if tracker.get(source) != doc_id:
-            new_docs.append(doc)
-            tracker[source] = doc_id
+
+        entry = tracker.get(source)
+        if entry and entry.get("doc_id") == doc_id and entry.get("chunked") and entry.get("indexed"):
+            # Ya se procesó y se indexó este documento
+            continue
+
+        new_docs.append(doc)
+        tracker[source] = {"doc_id": doc_id, "chunked": False, "indexed": False}
+
+    # Guardar inmediatamente el estado para evitar reprocesar en caso de fallo
+    save_tracker(tracker)
 
     if new_docs:
         print(f"\n🟢 Nuevos documentos detectados: {len(new_docs)}")
@@ -63,7 +79,17 @@ def sync_and_index(gpt_id: str):
             size=settings.CHUNK_SIZE,
             overlap=settings.CHUNK_OVERLAP,
         )
+
+        # Marcar como troceados para evitar reprocesos futuros
+        for doc in new_docs:
+            tracker[doc["metadata"]["source"]]["chunked"] = True
+        save_tracker(tracker)
+
         index_chunks(chunks, gpt_id=gpt_id)
+
+        # Marcar como indexados tras completarse sin errores
+        for doc in new_docs:
+            tracker[doc["metadata"]["source"]]["indexed"] = True
         print("✅ Reindexado completado.")
     else:
         print("No hay documentos nuevos para indexar.")
