@@ -247,7 +247,8 @@
         
     - Vuelve a trocear y reindexar solo lo nuevo
         
- - Control mediante archivo `.processed_files.json`
+ - Control mediante archivo `.processed_files.json` (ahora registra el hash del
+   documento y si ha sido troceado e indexado para evitar reprocesos)
  - Parametrización por `--gpt_id` para clasificar por GPT
  - Se calcula un hash por archivo para detectar cambios y evitar reindexados innecesarios
  - Listo para ejecución manual o futura automatización por `cron` / `Task Scheduler`
