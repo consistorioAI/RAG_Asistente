@@ -1,13 +1,18 @@
 # scripts/start_api.py
 
-import uvicorn
-from pathlib import Path
-import sys
-from src.config import settings
-import os
+from __future__ import annotations
 
-# Añadir la raíz del proyecto al path para que se pueda importar `src.api.main`
-sys.path.append(str(Path(__file__).resolve().parent.parent))
+import os
+import sys
+from pathlib import Path
+
+# 1️⃣  AÑADIR LA RAÍZ **ANTES** DE CUALQUIER IMPORT DE `src`
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.append(str(PROJECT_ROOT))
+
+from src.config import settings  # noqa: E402  ← ahora sí funciona
+
+import uvicorn  # noqa: E402  (se importa después para mantener orden lógico)
 
 if __name__ == "__main__":
     # No usar reload en Windows, rompe multiprocessing + imports
