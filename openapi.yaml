@@ -1,52 +1,88 @@
+openapi: 3.1.0
+info:
+  title: RAG Legal API
+  description: API de consulta legal basada en RAG para documentos internos.
+  version: "1.0"
+
+servers:
+  - url: https://api.consistorioai.es     # ← dominio final en HTTPS
+
 components:
   securitySchemes:
     ApiKeyAuth:
+      type: apiKey
       in: header
       name: X-API-Key
-      type: apiKey
-info:
-  description: API de consulta legal basada en RAG para documentos internos
-  title: RAG Legal API
-  version: '1.0'
-openapi: 3.1.0
+
+  schemas:
+    QueryRequest:
+      type: object
+      properties:
+        gpt_id:
+          type: string
+          description: (Opcional) Identificador del GPT que hace la pregunta
+        question:
+          type: string
+          description: Pregunta legal a responder
+      required:
+        - question
+
+    Source:
+      type: object
+      properties:
+        content:
+          type: string
+          description: Fragmento del documento usado como evidencia
+        metadata:
+          type: object
+          description: Datos adicionales: URL, título, etc.
+      required:
+        - content
+
+    QueryResponse:
+      type: object
+      properties:
+        answer:
+          type: string
+          description: Respuesta generada por el modelo
+        sources:
+          type: array
+          items:
+            $ref: "#/components/schemas/Source"
+          description: Lista de evidencias utilizadas
+      required:
+        - answer
+
 paths:
   /query:
     post:
+      summary: Consultar el sistema RAG
       operationId: queryLegal
+      security:
+        - ApiKeyAuth: []
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              properties:
-                gpt_id:
-                  description: (Opcional) Identificador del GPT que hace la pregunta
-                  type: string
-                question:
-                  description: Pregunta legal a responder
-                  type: string
-              type: object
-        required: true
+              $ref: "#/components/schemas/QueryRequest"
+            examples:
+              ejemplo:
+                value:
+                  question: "¿Cuál es el plazo de prescripción para un recurso contencioso-administrativo?"
       responses:
-        '200':
+        "200":
+          description: Respuesta generada
           content:
             application/json:
               schema:
-                properties:
-                  answer:
-                    type: string
-                  sources:
-                    items:
-                      properties:
-                        content:
-                          type: string
+                $ref: "#/components/schemas/QueryResponse"
+              examples:
+                ejemplo:
+                  value:
+                    answer: "El plazo es de dos meses desde la notificación del acto, conforme al art. 46.1 LJCA."
+                    sources:
+                      - content: "Artículo 46.1 Ley 29/1998..."
                         metadata:
-                          type: object
-                      type: object
-                    type: array
-                type: object
-          description: Respuesta generada
-      security:
-      - ApiKeyAuth: []
-      summary: Consultar el sistema RAG
-servers:
-- url: http://158.158.16.45:8000
+                          url: "https://boe.es/.../ley_29_1998"
+                          title: "Ley de la Jurisdicción Contencioso-Administrativa"
