@@ -17,7 +17,9 @@ services:
       GRPC_ENABLED: "true"
       GRPC_BIND_PORT: "50051"
     volumes:
-      - weaviate_data:/var/lib/weaviate
+      # Bind-mount explícito: carpeta del host con los datos  ➜  ruta interna esperada
+      - /home/consistorioai/weaviate_data:/var/lib/weaviate
 
-volumes:
-  weaviate_data:
+# Eliminamos la declaración de volumen anónimo porque ya no se usa
+# volumes:
+#   weaviate_data:
