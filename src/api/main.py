@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException, Depends, Header
 from fastapi.concurrency import run_in_threadpool
 from src.api.schemas import QueryRequest, QueryResponse, SourceDocument
 from src.rag_logic.generator import get_rag_chain
+from fastapi import Header
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
@@ -10,23 +11,27 @@ import traceback
 from src.config import settings  # <-- importar configuración del .env
 
 app = FastAPI(title="RAG API", description="API de consulta semántica legal", version="0.1.0")
+ALLOWED_ORIGINS = ["https://chatgpt.com"]  # o añade tu dominio de front-end
 
 # Permitir el acceso a la API desde cualquier origen para que la 
 # documentación interactiva funcione correctamente cuando se accede 
 # de forma remota.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["POST", "GET", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type", "X-API-Key"],
 )
 
 
-def verify_api_key(x_api_key: str = Header(None)):
+def verify_api_key(
+    x_api_key: str = Header(
+        None, alias="X-API-Key", convert_underscores=False   # alias explícito
+    )
+):
     if settings.API_KEY and x_api_key != settings.API_KEY:
         raise HTTPException(status_code=401, detail="Invalid API key")
-    return True
 
 @app.post("/query", response_model=QueryResponse)
 async def query(request: QueryRequest, valid: bool = Depends(verify_api_key)):
