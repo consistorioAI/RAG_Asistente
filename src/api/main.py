@@ -70,7 +70,7 @@ async def query(request: QueryRequest, valid: bool = Depends(verify_api_key)):
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Error al procesar la consulta: {str(e)}")
 
-@app.get("/openapi.yaml")
-def serve_openapi_spec():
-    openapi_path = Path(__file__).resolve().parent.parent.parent / "openapi.yaml"
-    return FileResponse(openapi_path, media_type="text/yaml")
+app.get("/openapi.yaml", include_in_schema=False)
+async def openapi_yaml():
+    return FileResponse("openapi.yaml", media_type="application/yaml")
+
