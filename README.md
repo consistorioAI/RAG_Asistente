@@ -286,6 +286,13 @@
 - Actualización de utilidades (`delete_class.py`, `list_embeddings.py`, `show_classes.py`) para listar y gestionar colecciones con la nueva sintaxis.
 
 
+### **FASE 16: Supervisión automática de servicios**
+
+- Se añaden archivos `services/rag_watchdog.service` y `services/rag_watchdog.timer` para monitorizar la API y Weaviate.
+- Para activarlo en sistemas con `systemd`:
+  ```bash
+  sudo systemctl enable --now rag_watchdog.timer
+  ```
 ---
 
 ### **PENDIENTE ACTUAL**
