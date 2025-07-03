@@ -159,11 +159,9 @@
 ### **FASE 9: Integración con GPT personalizado de OpenAI**
 
 - Creación y edición de archivo `openapi.yaml` con especificación 3.1.0
-    
-- Exposición del archivo en `/openapi.yaml` desde FastAPI
-    
+- Los archivos `openapi.yaml` y `ai-plugin.json` se colocan en `static/` y se sirven desde FastAPI en `/openapi.yaml` y `/.well-known/ai-plugin.json`.
 - Configuración de túnel público con `ngrok`
-    
+
 - Automatización:
 
     - Nuevo `run.py` inicia Weaviate con Docker Compose y arranca la API. Ejecutar `python run.py` para poner ambos servicios en marcha.

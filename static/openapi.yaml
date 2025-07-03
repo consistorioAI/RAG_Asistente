@@ -1,0 +1,75 @@
+openapi: 3.1.0
+info:
+  title: RAG Legal API
+  description: API de consulta legal basada en RAG para documentos internos
+  version: "1.0"
+
+servers:
+  - url: https://api.consistorioai.es
+
+paths:
+  /query:
+    post:
+      summary: Consultar el sistema RAG
+      operationId: queryLegal
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QueryRequest"
+      responses:
+        "200":
+          description: Respuesta generada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QueryResponse"
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+  schemas:
+    QueryRequest:
+      type: object
+      properties:
+        gpt_id:
+          type: string
+          description: Identificador opcional del GPT
+        question:
+          type: string
+          description: Pregunta legal a responder
+      required:
+        - question
+
+    Source:
+      type: object
+      properties:
+        content:
+          type: string
+          description: Fragmento de evidencia
+        metadata:
+          type: object
+          description: Datos de la fuente (URL, título…)
+      required:
+        - content
+
+    QueryResponse:
+      type: object
+      properties:
+        answer:
+          type: string
+          description: Respuesta generada
+        sources:
+          type: array
+          items:
+            $ref: "#/components/schemas/Source"
+          description: Evidencias utilizadas
+      required:
+        - answer
