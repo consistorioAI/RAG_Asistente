@@ -70,12 +70,7 @@ async def query(request: QueryRequest, valid: bool = Depends(verify_api_key)):
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Error al procesar la consulta: {str(e)}")
 
-@app.get("/.well-known/ai-plugin.json", include_in_schema=False)
-async def ai_plugin():
-    return FileResponse("static/ai-plugin.json", media_type="application/json")
-
-
-@app.get("/openapi.yaml", include_in_schema=False)
+app.get("/openapi.yaml", include_in_schema=False)
 async def openapi_yaml():
-    return FileResponse("static/openapi.yaml", media_type="text/yaml")
+    return FileResponse("openapi.yaml", media_type="application/yaml")
 
