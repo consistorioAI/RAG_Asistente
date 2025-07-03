@@ -1,0 +1,10 @@
+[Unit]
+Description=Periodic check of RAG services
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=5min
+
+[Install]
+WantedBy=timers.target
+
