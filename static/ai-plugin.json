@@ -1,0 +1,20 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "consistorioAI",
+  "name_for_model": "consistorioAI",
+  "description_for_human": "Consulta documentos legales con RAG",
+  "description_for_model": "Responde preguntas legales basadas en documentos internos.",
+  "auth": {
+    "type": "api_key",
+    "authorization_type": "header",
+    "header_name": "X-API-Key"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://api.consistorioai.es/openapi.yaml",
+    "is_user_authenticated": true
+  },
+  "logo_url": "https://api.consistorioai.es/logo.png",
+  "contact_email": "soporte@example.com",
+  "legal_info_url": "https://api.consistorioai.es/legal"
+}
