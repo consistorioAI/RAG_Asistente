@@ -14,7 +14,7 @@ services:
       DEFAULT_VECTORIZER_MODULE: "none"
       ENABLE_MODULES: "none"
       CLUSTER_HOSTNAME: "node1"
-      GRPC_ENABLED: "true"
+      ENABLE_GRPC: "true"
       GRPC_BIND_PORT: "50051"
     volumes:
       # Bind-mount explícito: carpeta del host con los datos  ➜  ruta interna esperada

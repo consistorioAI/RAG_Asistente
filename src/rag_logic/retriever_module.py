@@ -25,7 +25,7 @@ def _get_weaviate_client():
         http_secure=secure,
         grpc_host=host,
         grpc_port=50051,   # ajusta si tu instancia usa otro
-        grpc_secure=secure,
+        grpc_secure=False,
     )
     client.connect()
     return client

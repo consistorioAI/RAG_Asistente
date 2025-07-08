@@ -31,7 +31,7 @@ def get_weaviate_client() -> WeaviateClient:
 
     client = connect_to_custom(
         host, http_port=http_port, http_secure=secure,
-        grpc_host=host, grpc_port=_GRPC_PORT, grpc_secure=secure,
+        grpc_host=host, grpc_port=_GRPC_PORT, grpc_secure=False,
     )
     client.connect()
     return client
