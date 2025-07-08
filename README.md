@@ -41,7 +41,7 @@
 
 - División de los documentos en chunks usando `RecursiveCharacterTextSplitter`
     
-- Uso de embeddings locales con modelo `BAAI/bge-small-en-v1.5`
+- Uso de embeddings locales con modelo `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`
 - Para acelerar la generación de embeddings se puede configurar `EMBEDDING_DEVICE=cuda` y ajustar `BATCH_SIZE` en `.env`
 
 - Weaviate connection (probado con weaviate-client v4.x)
