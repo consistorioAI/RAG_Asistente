@@ -56,7 +56,7 @@ def get_weaviate_client():
 @lru_cache(maxsize=1)
 def _get_embedder():
     return HuggingFaceEmbeddings(
-        model_name="BAAI/bge-small-en-v1.5",
+        model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
         encode_kwargs={"batch_size": settings.BATCH_SIZE},
     )
 

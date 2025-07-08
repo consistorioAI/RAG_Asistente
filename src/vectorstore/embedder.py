@@ -17,7 +17,7 @@ _GRPC_PORT = 50051
 # ── embeddings ────────────────────
 def get_local_embedder():
     return HuggingFaceEmbeddings(
-        model_name="BAAI/bge-small-en-v1.5",
+        model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
         model_kwargs={"device": settings.EMBEDDING_DEVICE},
         encode_kwargs={"batch_size": settings.BATCH_SIZE},
     )
