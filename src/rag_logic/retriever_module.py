@@ -12,8 +12,8 @@ from src.config import settings
 # 1) Cliente Weaviate (anónimo)
 # ──────────────────────────────────────────────────────────────
 @lru_cache(maxsize=1)
-def _get_weaviate_client():
-    """Devuelve un WeaviateClient ya conectado (cacheado)."""
+def _create_weaviate_client():
+    """Create and connect a new Weaviate client (cached)."""
     parsed = urlparse(settings.WEAVIATE_URL)
     host = parsed.hostname or "localhost"
     secure = parsed.scheme == "https"
@@ -28,6 +28,25 @@ def _get_weaviate_client():
         grpc_secure=False,
     )
     client.connect()
+    return client
+
+
+def get_weaviate_client():
+    """Return a cached Weaviate client, recreating it if the connection is lost."""
+    client = _create_weaviate_client()
+    try:
+        ready = client.is_ready()
+    except Exception:
+        ready = False
+
+    if not ready:
+        try:
+            client.close()
+        except Exception:
+            pass
+        _create_weaviate_client.cache_clear()
+        client = _create_weaviate_client()
+
     return client
 
 
@@ -54,7 +73,7 @@ def ensure_collection_exists(client, collection_name: str) -> None:
 
 
 def get_retriever(k: int = settings.RETRIEVER_K, collection_name: str = "LegalDocs"):
-    client = _get_weaviate_client()
+    client = get_weaviate_client()
     ensure_collection_exists(client, collection_name)
     embedder = _get_embedder()
 
