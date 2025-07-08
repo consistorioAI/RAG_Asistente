@@ -1,7 +1,7 @@
 from langchain.chains.combine_documents.stuff import StuffDocumentsChain
 from langchain.chains.llm import LLMChain
 from langchain_core.documents import Document
-from src.rag_logic.retriever_module import get_retriever
+from src.rag_logic.retriever_module import get_retriever, _create_weaviate_client
 from src.rag_logic.llm_local import get_local_llm
 from src.config.gpt_profiles import GPT_PROFILES
 from transformers import BertTokenizer
@@ -66,7 +66,13 @@ def get_rag_chain(gpt_id: str = "default", k: int = settings.RETRIEVER_K):
     )
 
     def run_rag(question: str):
-        docs = retriever.get_relevant_documents(question)
+        nonlocal retriever
+        try:
+            docs = retriever.get_relevant_documents(question)
+        except Exception:
+            _create_weaviate_client.cache_clear()
+            retriever = get_retriever(k=k, collection_name=profile["collection"])
+            docs = retriever.get_relevant_documents(question)
         docs = filter_docs_by_token_limit(docs, max_tokens=settings.MAX_CONTEXT_TOKENS)
 
         if settings.DEBUG_PRINT_CONTEXT:
