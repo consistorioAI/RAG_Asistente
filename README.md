@@ -203,10 +203,13 @@
     - Prompt especializado
         
 - Lógica modular en `get_rag_chain()` y `get_retriever()` para aplicar el `gpt_id`
-    
+
 - Preparación para asignar distintos subconjuntos documentales (por clase o metadatos)
-    
+
 - Simulación de estructura futura para múltiples GPTs (`legal`, `laboral`, etc.)
+
+- Se añaden los perfiles `contratacion` y `procesal`, cada uno con su propia
+  colección en Weaviate y prompt especializado.
     
 
 ---
@@ -228,6 +231,8 @@
     
     ```bash
     python scripts/sync_and_index.py --gpt_id default
+    python scripts/sync_and_index.py --gpt_id contratacion
+    python scripts/sync_and_index.py --gpt_id procesal
     ```
     
 - Confirmación de regeneración exitosa con chunks más cortos y mejor distribuidos

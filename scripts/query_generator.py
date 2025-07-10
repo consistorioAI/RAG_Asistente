@@ -17,6 +17,7 @@ from src.config import settings
 NUM_K = settings.RETRIEVER_K  # Número de documentos a recuperar
 
 from src.rag_logic.generator import get_rag_chain
+import argparse
 
 # if __name__ == "__main__":
 #     with redirect_stderr(null_output):
@@ -51,8 +52,12 @@ from src.rag_logic.generator import get_rag_chain
 #                 print(f"\n[Error durante la generación]: {e}")
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--gpt_id", default="default", help="Perfil de GPT a usar")
+    args = parser.parse_args()
+
     print("Generador RAG iniciado. (Ctrl+C para salir).")
-    chain = get_rag_chain(k=NUM_K)
+    chain = get_rag_chain(gpt_id=args.gpt_id, k=NUM_K)
 
     while True:
         pregunta = input("\nPregunta legal: ").strip()
