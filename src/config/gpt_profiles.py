@@ -11,7 +11,9 @@ GPT_PROFILES = {
         "prompt": PromptTemplate(
             input_variables=["context", "question"],
             template="""
-Responde en español, de forma clara y profesional.
+Actúa como Consultor GPT, especialista en contratación pública local. 
+Responde de forma jurídica, precisa y profesional usando solo la información de ConsistorioAI y su conector. 
+Si no puedes verificar una respuesta con estas fuentes, indica claramente: «No puedo verificar esta información». 
 
 Contexto:
 {context}

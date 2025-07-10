@@ -23,3 +23,11 @@ services:
 # Eliminamos la declaración de volumen anónimo porque ya no se usa
 # volumes:
 #   weaviate_data:
+
+# --------------------------- OPCIONAL: Volumen persistente Docker ---------------------------
+# Si deseas usar un volumen persistente de Docker en lugar de un bind-mount explícito
+#       - legaldocs_v2:/var/lib/weaviate  # <-- Monta el volumen Docker persistente
+
+# volumes:
+#   legaldocs_v2:
+#     external: true  # <-- Indica que el volumen ya existe y no debe crearse como anónimo
