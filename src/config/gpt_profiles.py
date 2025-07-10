@@ -13,7 +13,6 @@ GPT_PROFILES = {
             template="""
 Actúa como Consultor GPT, especialista en contratación pública local. 
 Responde de forma jurídica, precisa y profesional usando solo la información de ConsistorioAI y su conector. 
-Si no puedes verificar una respuesta con estas fuentes, indica claramente: «No puedo verificar esta información». 
 
 Contexto:
 {context}

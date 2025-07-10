@@ -15,7 +15,7 @@ SRC="$INCOMING/$FILE"
 [[ -f $SRC ]] || { echo "❌ No existe $SRC"; exit 1; }
 
 echo "arando contenedor $CONTAINER…"
-docker stop "$CONTAINER" >/dev/null
+sudo docker stop "$CONTAINER" >/dev/null
 
 echo "Limpiando datos antiguos (se conservan incoming/ y archivados/)…"
 find "$DATA_ROOT" -mindepth 1 -maxdepth 1 \
@@ -30,7 +30,7 @@ tar -xzf "$SRC" -C "$DATA_ROOT"
   || { echo "ERROR: schema.db o legaldocs faltan; restauración abortada."; exit 1; }
 
 echo "Arrancando contenedor $CONTAINER…"
-docker start "$CONTAINER" >/dev/null
+sudo docker start "$CONTAINER" >/dev/null
 
 echo "Archivando backup usado (moviendo a $ARCHIVE/)"
 mkdir -p "$ARCHIVE"
