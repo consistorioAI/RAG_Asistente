@@ -81,12 +81,4 @@ Respuesta:
 """
         )
     },
-
-    # este es un ejemplo de cómo podrías definir un perfil para recursos humanos
-    # no es necesario que uses un PromptTemplate específico, puedes dejarlo como None
-
-    "rrhh": {
-        "collection": "LegalDocs_rrhh",
-        "prompt": None  # Si quisieras usar uno genérico
-    }
 }
