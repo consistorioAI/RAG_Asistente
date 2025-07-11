@@ -42,7 +42,7 @@ components:
         gpt_id:
           type: string
           description: Identificador opcional del GPT
-          enum: [default, contratacion, procesal]
+          enum: [default, contratacion, consultor]
         question:
           type: string
           description: Pregunta legal a responder

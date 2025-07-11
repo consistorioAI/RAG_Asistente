@@ -10,6 +10,7 @@ sys.path.append(str(ROOT))
 
 from weaviate import connect_to_custom
 from src.config import settings
+import argparse
 
 # ---------- Conexión ----------
 parsed = urlparse(settings.WEAVIATE_URL)
@@ -23,7 +24,11 @@ client = connect_to_custom(
 )
 client.connect()
 
-COL_NAME = "LegalDocs"
+parser = argparse.ArgumentParser()
+parser.add_argument("--gpt_id", default="default", help="Perfil de GPT")
+args = parser.parse_args()
+
+COL_NAME = f"LegalDocs_{args.gpt_id}"
 
 try:
     if not client.collections.exists(COL_NAME):

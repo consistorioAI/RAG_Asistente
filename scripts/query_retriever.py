@@ -13,7 +13,8 @@ if __name__ == "__main__":
     parser.add_argument("--gpt_id", default="default", help="Perfil de GPT")
     args = parser.parse_args()
 
-    retriever = get_retriever(k=settings.RETRIEVER_K, collection_name=f"LegalDocs_{args.gpt_id}" if args.gpt_id != "default" else "LegalDocs")
+    retriever = get_retriever(k=settings.RETRIEVER_K,
+                              collection_name=f"LegalDocs_{args.gpt_id}")
     
     query = input("Introduce tu pregunta o búsqueda: ")
 

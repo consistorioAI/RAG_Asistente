@@ -48,7 +48,7 @@
     
 - Ajustes en el schema de Weaviate:
     
-    - Definición de clase `LegalDocs`
+    - Definición de clase `LegalDocs_default`
         
     - Uso de `vectorizer: none`
         
@@ -208,7 +208,7 @@
 
 - Simulación de estructura futura para múltiples GPTs (`legal`, `laboral`, etc.)
 
-- Se añaden los perfiles `contratacion` y `procesal`, cada uno con su propia
+- Se añaden los perfiles `contratacion` y `consultor`, cada uno con su propia
   colección en Weaviate y prompt especializado.
     
 
@@ -225,14 +225,14 @@
         
     - Eliminación de `.processed_files.json`
         
-    - Borrado completo de la clase `LegalDocs` en Weaviate
+    - Borrado completo de la clase `LegalDocs_default` en Weaviate
         
 - Reindexación total con los nuevos parámetros:
     
     ```bash
     python scripts/sync_and_index.py --gpt_id default
     python scripts/sync_and_index.py --gpt_id contratacion
-    python scripts/sync_and_index.py --gpt_id procesal
+    python scripts/sync_and_index.py --gpt_id consultor
     ```
     
 - Confirmación de regeneración exitosa con chunks más cortos y mejor distribuidos
@@ -258,7 +258,11 @@
     
 #### limpieza y reindexación
 ```
-(venv) PS C:\Users\ramon\Desktop\RAG_asistente> del data\chunks\*.txt (venv) PS C:\Users\ramon\Desktop\RAG_asistente> python scripts/delete_class.py Clase 'LegalDocs' eliminada de Weaviate. (venv) PS C:\Users\ramon\Desktop\RAG_asistente> del data\.processed_files.json (venv) PS C:\Users\ramon\Desktop\RAG_asistente> python scripts/sync_and_index.py --gpt_id default
+(venv) PS C:\Users\ramon\Desktop\RAG_asistente> del data\chunks\*.txt
+(venv) PS C:\Users\ramon\Desktop\RAG_asistente> python scripts/delete_class.py --gpt_id default
+Clase 'LegalDocs_default' eliminada de Weaviate.
+(venv) PS C:\Users\ramon\Desktop\RAG_asistente> del data\.processed_files.json
+(venv) PS C:\Users\ramon\Desktop\RAG_asistente> python scripts/sync_and_index.py --gpt_id default
 ```
 ### **FASE 14: Sincronización opcional con OneDrive**
 
