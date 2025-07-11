@@ -7,7 +7,7 @@ GPT_PROFILES = {
     # Define aquí los perfiles de GPT que usarás en tu aplicación
     # Cada perfil debe tener un nombre único y puede incluir una colección de documentos
     "default": {
-        "collection": "LegalDocs",
+        "collection": "LegalDocs_default",
         "prompt": PromptTemplate(
             input_variables=["context", "question"],
             template="""
@@ -24,24 +24,6 @@ Respuesta:
 """
         )
     },
-    "contratos": {
-        "collection": "LegalDocs_contratos",
-        "prompt": PromptTemplate(
-            input_variables=["context", "question"],
-            template="""
-Contesta en tono formal y jurídico, citando fragmentos relevantes.
-
-Contexto legal:
-{context}
-
-Pregunta:
-{question}
-
-Conclusión:
-"""
-        )
-    },
-
     "contratacion": {
         "collection": "LegalDocs_contratacion",
         "prompt": PromptTemplate(
@@ -62,14 +44,14 @@ Respuesta:
         )
     },
 
-    "procesal": {
-        "collection": "LegalDocs_procesal",
+
+    "consultor": {
+        "collection": "LegalDocs_consultor",
         "prompt": PromptTemplate(
             input_variables=["context", "question"],
             template="""
-Eres un asistente jurídico especializado en derecho procesal.
-Extrae los fragmentos relevantes de los documentos y responde de
-forma profesional en español.
+Eres un consultor jurídico especializado en derecho administrativo.
+Responde de forma clara y concisa utilizando únicamente la información proporcionada.
 
 Contexto:
 {context}

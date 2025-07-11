@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """
-Elimina la colección 'LegalDocs' de Weaviate (API v4).
+Elimina una colección de Weaviate (API v4).
+Uso:
+    python delete_class.py --gpt_id <perfil>
 """
 
 import sys
@@ -12,6 +14,7 @@ sys.path.append(str(ROOT))
 
 from weaviate import connect_to_custom
 from src.config import settings
+import argparse
 
 # ── Construcción de conexión ──
 parsed = urlparse(settings.WEAVIATE_URL)
@@ -33,13 +36,16 @@ client = connect_to_custom(
 )
 client.connect()
 
-# ── Eliminar colección ──
-CLASS_NAME = "LegalDocs"
+parser = argparse.ArgumentParser()
+parser.add_argument("--gpt_id", default="default", help="Perfil de GPT")
+args = parser.parse_args()
 
-if client.collections.exists(CLASS_NAME):
-    client.collections.delete(CLASS_NAME)  # ← aquí corregido
-    print(f"✅ Colección '{CLASS_NAME}' eliminada de Weaviate.")
+class_name = f"LegalDocs_{args.gpt_id}"
+
+if client.collections.exists(class_name):
+    client.collections.delete(class_name)
+    print(f"✅ Colección '{class_name}' eliminada de Weaviate.")
 else:
-    print(f"ℹ️  La colección '{CLASS_NAME}' no existe.")
+    print(f"ℹ️  La colección '{class_name}' no existe.")
 
 client.close()

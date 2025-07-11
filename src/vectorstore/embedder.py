@@ -53,7 +53,7 @@ def chunk_documents(docs, size=500, overlap=100):
 
 # ── indexing ──────────────────────
 def index_chunks(chunks, gpt_id="default"):
-    index_name = "LegalDocs" if gpt_id == "default" else f"LegalDocs_{gpt_id}"
+    index_name = f"LegalDocs_{gpt_id}"
     client = get_weaviate_client()
 
     if not client.collections.exists(index_name):

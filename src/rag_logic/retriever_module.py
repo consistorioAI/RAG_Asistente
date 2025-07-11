@@ -72,7 +72,7 @@ def ensure_collection_exists(client, collection_name: str) -> None:
         )
 
 
-def get_retriever(k: int = settings.RETRIEVER_K, collection_name: str = "LegalDocs"):
+def get_retriever(k: int = settings.RETRIEVER_K, collection_name: str = "LegalDocs_default"):
     client = get_weaviate_client()
     ensure_collection_exists(client, collection_name)
     embedder = _get_embedder()
