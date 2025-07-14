@@ -17,17 +17,8 @@ services:
       ENABLE_GRPC: "true"
       GRPC_BIND_PORT: "50051"
     volumes:
-      # Bind-mount explícito: carpeta del host con los datos  ➜  ruta interna esperada
-      - /home/consistorioai/weaviate_data:/var/lib/weaviate
+      - legaldocs_v3:/var/lib/weaviate   # <-- Aquí es donde cambias el volumen
 
-# Eliminamos la declaración de volumen anónimo porque ya no se usa
-# volumes:
-#   weaviate_data:
-
-# --------------------------- OPCIONAL: Volumen persistente Docker ---------------------------
-# Si deseas usar un volumen persistente de Docker en lugar de un bind-mount explícito
-#       - legaldocs_v2:/var/lib/weaviate  # <-- Monta el volumen Docker persistente
-
-# volumes:
-#   legaldocs_v2:
-#     external: true  # <-- Indica que el volumen ya existe y no debe crearse como anónimo
+volumes:
+  legaldocs_v3:
+    external: true  # <-- Indica que el volumen ya existe
