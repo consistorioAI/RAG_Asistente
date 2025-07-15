@@ -17,8 +17,4 @@ services:
       ENABLE_GRPC: "true"
       GRPC_BIND_PORT: "50051"
     volumes:
-      - legaldocs_v3:/var/lib/weaviate   # <-- Aquí es donde cambias el volumen
-
-volumes:
-  legaldocs_v3:
-    external: true  # <-- Indica que el volumen ya existe
+      - ${WEAVIATE_HOST_VOLUME_PATH}:/var/lib/weaviate

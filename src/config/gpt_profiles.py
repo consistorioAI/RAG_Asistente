@@ -68,6 +68,7 @@ Responde únicamente utilizando el contexto proporcionado. No inventes, no relle
   - Puedes recomendar al usuario la consulta de fuentes adicionales o legislación específica.
 
 
+
 ### FORMATO:
 1. **Resumen jurídico**
 2. **Fundamentos extraídos**
