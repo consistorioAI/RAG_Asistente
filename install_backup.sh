@@ -14,22 +14,34 @@ SRC="$INCOMING/$FILE"
 
 [[ -f $SRC ]] || { echo "❌ No existe $SRC"; exit 1; }
 
-echo "Parando contenedor $CONTAINER…"
-sudo docker stop "$CONTAINER" >/dev/null
+echo "🛑 Parando contenedor $CONTAINER…"
+sudo docker stop "$CONTAINER" >/dev/null || {
+  echo "⚠️  No se pudo parar el contenedor (puede que ya esté detenido)"
+}
+
+# Verificamos que realmente está detenido
+while [ "$(docker inspect -f '{{.State.Running}}' $CONTAINER 2>/dev/null || echo "false")" = "true" ]; do
+    echo "⏳ Esperando que $CONTAINER se detenga..."
+    sleep 1
+done
 
 echo "🧹 Limpiando datos antiguos (se conservan incoming/ y archivados/)..."
 find "$DATA_ROOT" -mindepth 1 -maxdepth 1 \
      ! -name incoming ! -name archivados \
      -exec rm -rf {} +
 
-echo "Extrayendo backup en $DATA_ROOT..."
-tar -xzf "$SRC" -C "$DATA_ROOT"
+echo "📦 Extrayendo backup en $DATA_ROOT..."
+tar -xzf "$SRC" -C "$DATA_ROOT" --strip-components=1
 
 # Verificación mínima
-[[ -f $DATA_ROOT/schema.db && -d $DATA_ROOT/legaldocs ]] \
-  || { echo "❌ ERROR: schema.db o legaldocs faltan; restauración abortada."; exit 1; }
+if [[ -f $DATA_ROOT/schema.db ]] && ls "$DATA_ROOT"/legaldocs_* >/dev/null 2>&1; then
+    echo "✅ Backup contiene schema.db y carpetas legaldocs_*"
+else
+    echo "❌ ERROR: schema.db o carpetas legaldocs_* faltan; restauración abortada."
+    exit 1
+fi
 
-echo "Arrancando contenedor $CONTAINER..."
+echo "🚀 Arrancando contenedor $CONTAINER..."
 sudo docker start "$CONTAINER" >/dev/null
 
 echo "📂 Archivando backup usado (moviendo a $ARCHIVE/)"
