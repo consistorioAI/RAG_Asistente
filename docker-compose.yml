@@ -17,8 +17,4 @@ services:
       ENABLE_GRPC: "true"
       GRPC_BIND_PORT: "50051"
     volumes:
-      - legaldocs_v3:/var/lib/weaviate
-
-volumes:
-  legaldocs_v3:
-    external: true
+      - /home/consistorioai/weaviate_data:/var/lib/weaviate
