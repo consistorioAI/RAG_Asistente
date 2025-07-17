@@ -9,7 +9,7 @@ Este asistente implementa un sistema de generación aumentada por recuperación 
 
 Entre los casos de uso habituales se encuentran la resolución de consultas jurídicas y el soporte documental interno.
 
-![Diagrama](images\DiagramaRAG.png)
+![Diagrama](/images/DiagramaRAG.png)
 
 
 ### **FASE 1: Preparación del entorno**
