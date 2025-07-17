@@ -3,6 +3,13 @@
 
 ---
 
+### **Introducción**
+
+Este asistente implementa un sistema de generación aumentada por recuperación (RAG) orientado a consultas legales municipales. Los documentos se ingestan de forma local o desde OneDrive y se indexan en Weaviate. Un modelo de lenguaje local o de OpenAI genera las respuestas, accesibles mediante una API REST o a través de un plugin de ChatGPT.
+
+Entre los casos de uso habituales se encuentran la resolución de consultas jurídicas y el soporte documental interno.
+
+
 ### **FASE 1: Preparación del entorno**
 
 - Creación del entorno virtual con `venv`
@@ -293,6 +300,23 @@
   ```
 ---
 
+### **FASE 17: Scripts de arranque y vigilancia**
+
+- `start_server.sh` inicia la API en segundo plano y guarda los mensajes en `rag_api.log`.
+  ```bash
+  bash start_server.sh
+  ```
+- `stop_api.sh` detiene de forma limpia cualquier proceso `run.py` que esté en ejecución.
+  ```bash
+  bash stop_api.sh
+  ```
+- `watch_services.sh` comprueba periódicamente que Weaviate y la API sigan activos y los reinicie si se detienen.
+  ```bash
+  bash watch_services.sh
+  ```
+  Estos scripts pueden programarse mediante `cron` o integrarse con `systemd` para supervisión automática.
+
+
 ### **Configuraci\u00f3n del archivo .env**
 
 La ra\u00edz del proyecto contiene un archivo `.env.example` con todas las variables de entorno disponibles:
@@ -332,10 +356,5 @@ La ra\u00edz del proyecto contiene un archivo `.env.example` con todas las varia
 - `API_PORT` - puerto usado por el servidor FastAPI.
 - `API_WORKERS` - n\u00famero de procesos Uvicorn al ejecutar `start_api.py`.
 - `COMPOSE_FILE` - ruta personalizada para `docker-compose.yml`.
-
-### **PENDIENTE ACTUAL**
-
--  Validar resultados tras nueva indexación con consulta ejemplo
-    
 
 
