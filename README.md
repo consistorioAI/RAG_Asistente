@@ -1,5 +1,5 @@
 
-**Fecha de corte: Última integración verificada con GPT personalizado y respuesta simulada vía API**
+**Fecha de corte: Última integración verificada con dos GPTs funcionando
 
 ---
 
