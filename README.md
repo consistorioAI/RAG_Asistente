@@ -3,6 +3,13 @@
 
 ---
 
+### **Introducción**
+
+Este asistente implementa un sistema de generación aumentada por recuperación (RAG) orientado a consultas legales municipales. Los documentos se ingestan de forma local o desde OneDrive y se indexan en Weaviate. Un modelo de lenguaje local o de OpenAI genera las respuestas, accesibles mediante una API REST o a través de un plugin de ChatGPT.
+
+Entre los casos de uso habituales se encuentran la resolución de consultas jurídicas y el soporte documental interno.
+
+
 ### **FASE 1: Preparación del entorno**
 
 - Creación del entorno virtual con `venv`
