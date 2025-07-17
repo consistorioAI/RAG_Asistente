@@ -376,9 +376,9 @@ Entre los casos de uso habituales se encuentran la resolución de consultas jur�
   Estos scripts pueden programarse mediante `cron` o integrarse con `systemd` para supervisión automática.
 
 
-### **Configuraci\u00f3n del archivo .env**
+### **Configuración del archivo .env**
 
-La ra\u00edz del proyecto contiene un archivo `.env.example` con todas las variables de entorno disponibles:
+La raíz del proyecto contiene un archivo `.env.example` con todas las variables de entorno disponibles:
 
 - `OPENAI_API_KEY` - clave para la API de OpenAI.
 - `OPENAI_MODEL_NAME` - modelo de OpenAI a utilizar.
