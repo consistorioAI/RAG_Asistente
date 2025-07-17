@@ -65,7 +65,6 @@ Entre los casos de uso habituales se encuentran la resoluci√≥n de consultas jur√
 
 ### Otros componentes
 
-![psutil](https://img.shields.io/badge/psutil-3776AB?style=for-the-badge)
 [![psutil](https://img.shields.io/badge/psutil-3776AB?style=for-the-badge)](https://psutil.readthedocs.io/en/latest/)
 
 
