@@ -293,6 +293,22 @@
   ```
 ---
 
+### **FASE 17: Scripts de arranque y vigilancia**
+
+- `start_server.sh` inicia la API en segundo plano y guarda los mensajes en `rag_api.log`.
+  ```bash
+  bash start_server.sh
+  ```
+- `stop_api.sh` detiene de forma limpia cualquier proceso `run.py` que esté en ejecución.
+  ```bash
+  bash stop_api.sh
+  ```
+- `watch_services.sh` comprueba periódicamente que Weaviate y la API sigan activos y los reinicie si se detienen.
+  ```bash
+  bash watch_services.sh
+  ```
+  Estos scripts pueden programarse mediante `cron` o integrarse con `systemd` para supervisión automática.
+
 ### **PENDIENTE ACTUAL**
 
 -  Validar resultados tras nueva indexación con consulta ejemplo
