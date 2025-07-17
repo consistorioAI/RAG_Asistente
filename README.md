@@ -172,6 +172,7 @@ Entre los casos de uso habituales se encuentran la resolución de consultas jur�
 - Automatización:
 
     - Nuevo `run.py` inicia Weaviate con Docker Compose y arranca la API. Ejecutar `python run.py` para poner ambos servicios en marcha.
+    - En `docker-compose.yml` hay líneas comentadas para usar un volumen persistente de Docker (`legaldocs_v2`). Descoméntalas si prefieres un volumen en lugar del *bind mount* por defecto.
         
 - Validación de la función `queryLegal` desde GPT personalizado
     
@@ -294,6 +295,7 @@ Entre los casos de uso habituales se encuentran la resolución de consultas jur�
 ### **FASE 16: Supervisión automática de servicios**
 
 - Se añaden archivos `services/rag_watchdog.service` y `services/rag_watchdog.timer` para monitorizar la API y Weaviate.
+- Se incluye el script `watch_services.sh`, que puede ejecutarse solo o en conjunto con el servicio y su *timer* para una vigilancia continua.
 - Para activarlo en sistemas con `systemd`:
   ```bash
   sudo systemctl enable --now rag_watchdog.timer
