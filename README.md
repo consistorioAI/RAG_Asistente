@@ -298,9 +298,4 @@
 -  Validar resultados tras nueva indexación con consulta ejemplo
     
 
----
-TO DO:
 
-``` bash 
-(venv) PS C:\Users\ramon\Desktop\RAG_asistente> python .\scripts\query_generator.py Generador RAG iniciado. (Ctrl+C para salir). Pregunta legal: ¿Cuál es el plazo legal para presentar un recurso administrativo en un procedimiento de contratación pública? [Error durante la generación]: Requested tokens (34294) exceed context window of 2048
-```
