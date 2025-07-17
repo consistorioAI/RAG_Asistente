@@ -316,9 +316,45 @@ Entre los casos de uso habituales se encuentran la resolución de consultas jur�
   ```
   Estos scripts pueden programarse mediante `cron` o integrarse con `systemd` para supervisión automática.
 
-### **PENDIENTE ACTUAL**
 
--  Validar resultados tras nueva indexación con consulta ejemplo
-    
+### **Configuraci\u00f3n del archivo .env**
+
+La ra\u00edz del proyecto contiene un archivo `.env.example` con todas las variables de entorno disponibles:
+
+- `OPENAI_API_KEY` - clave para la API de OpenAI.
+- `OPENAI_MODEL_NAME` - modelo de OpenAI a utilizar.
+- `WEAVIATE_URL` - URL del servidor Weaviate.
+- `WEAVIATE_API_KEY` - clave de autenticaci\u00f3n para Weaviate.
+- `USE_LOCAL_LLM` - permite usar un LLM local en lugar de la API de OpenAI.
+- `LLM_MODEL_PATH` - ruta al modelo local en formato GGUF.
+- `LLM_MODEL_URL` - URL del servidor del modelo local.
+- `EMBEDDING_DEVICE` - dispositivo (`cpu` o `cuda`) para generar embeddings.
+- `ONEDRIVE_PATH` - directorio base para sincronizar con OneDrive.
+- `ONEDRIVE_CLIENT_ID` - identificador de la aplicaci\u00f3n en OneDrive.
+- `ONEDRIVE_CLIENT_SECRET` - secreto de la aplicaci\u00f3n.
+- `ONEDRIVE_TENANT_ID` - tenant de Azure asociado.
+- `ONEDRIVE_DRIVE_ID` - unidad de OneDrive a usar.
+- `ONEDRIVE_FOLDER` - carpeta remota con los documentos.
+- `USE_ONEDRIVE` - habilita la descarga desde OneDrive.
+- `ENTRYPOINT_URL` - URL p\u00fablica donde se expone la API.
+- `ONEDRIVE_MAX_RETRIES` - n\u00famero de reintentos ante fallos.
+- `ONEDRIVE_RETRY_DELAY` - pausa en segundos entre reintentos.
+- `DATA_RAW_PATH` - ruta de documentos originales.
+- `DATA_CHUNKS_PATH` - ruta donde se guardan los chunks procesados.
+- `DATA_INDEX_PATH` - ruta del \u00edndice local.
+- `USE_MOCK_MODE` - simula respuestas sin consultar el LLM.
+- `DEBUG_PRINT_CONTEXT` - muestra en consola el contexto enviado al modelo.
+- `API_KEY` - clave para proteger el endpoint REST.
+- `DOCS_INPUT_PATH` - ruta de entrada para los documentos.
+- `DOCS_OUTPUT_PATH` - ruta de salida para los chunks.
+- `CHUNK_SIZE` - tama\u00f1o de cada fragmento.
+- `CHUNK_OVERLAP` - solapamiento entre fragmentos.
+- `MAX_CONTEXT_TOKENS` - l\u00edmite de tokens de contexto.
+- `MAX_COMPLETION_TOKENS` - l\u00edmite de tokens generados por respuesta.
+- `RETRIEVER_K` - cantidad de documentos que recupera el buscador.
+- `BATCH_SIZE` - controla el tama\u00f1o de lote para generar embeddings.
+- `API_PORT` - puerto usado por el servidor FastAPI.
+- `API_WORKERS` - n\u00famero de procesos Uvicorn al ejecutar `start_api.py`.
+- `COMPOSE_FILE` - ruta personalizada para `docker-compose.yml`.
 
 
