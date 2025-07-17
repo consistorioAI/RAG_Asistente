@@ -3,7 +3,7 @@
 
 ---
 
-### **Introducción**
+# **Introducción**
 
 Este asistente implementa un sistema de generación aumentada por recuperación (RAG) orientado a consultas legales municipales. Los documentos se ingestan de forma local o desde OneDrive y se indexan en Weaviate. Un modelo de lenguaje local o de OpenAI genera las respuestas, accesibles mediante una API REST o a través de un plugin de ChatGPT.
 
@@ -11,6 +11,61 @@ Entre los casos de uso habituales se encuentran la resolución de consultas jur�
 
 ![Diagrama](/images/DiagramaRAG.png)
 
+---
+
+## Tecnologías y herramientas principales
+
+### Lenguajes
+
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge\&logo=python\&logoColor=white)
+![Bash](https://img.shields.io/badge/Bash-4EAA25?style=for-the-badge\&logo=gnubash\&logoColor=white)
+![YAML](https://img.shields.io/badge/YAML-CB171E?style=for-the-badge\&logo=yaml\&logoColor=white)
+![JSON](https://img.shields.io/badge/JSON-5C5C5C?style=for-the-badge\&logo=json\&logoColor=white)
+
+### Infraestructura y orquestación
+
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge\&logo=docker\&logoColor=white)
+![docker-compose](https://img.shields.io/badge/docker--compose-2496ED?style=for-the-badge\&logo=docker\&logoColor=white)
+![systemd](https://img.shields.io/badge/systemd-FFCC33?style=for-the-badge\&logo=linux\&logoColor=black)
+
+### Motor de vectores / base de datos
+
+![Weaviate](https://img.shields.io/badge/Weaviate-00A1E0?style=for-the-badge\&logo=weaviate\&logoColor=white)
+
+### Framework de IA y NLP
+
+![LangChain](https://img.shields.io/badge/LangChain-0066CC?style=for-the-badge\&logo=langchain\&logoColor=white)
+![sentence-transformers](https://img.shields.io/badge/sentence--transformers-FF6F00?style=for-the-badge)
+![transformers](https://img.shields.io/badge/transformers-FFCA28?style=for-the-badge\&logo=huggingface\&logoColor=black)
+![HuggingFace](https://img.shields.io/badge/HuggingFace-FFD21F?style=for-the-badge\&logo=huggingface\&logoColor=black)
+
+### Modelos de lenguaje
+
+![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=for-the-badge\&logo=openai\&logoColor=white)
+![llama-cpp-python](https://img.shields.io/badge/llama--cpp--python-6435A3?style=for-the-badge)
+
+### Framework web y APIs
+
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge\&logo=fastapi\&logoColor=white)
+![Uvicorn](https://img.shields.io/badge/Uvicorn-262626?style=for-the-badge\&logo=uvicorn\&logoColor=white)
+![Pydantic](https://img.shields.io/badge/Pydantic-0A1128?style=for-the-badge\&logo=pydantic\&logoColor=white)
+![OpenAPI 3.1](https://img.shields.io/badge/OpenAPI-3.1-6BA539?style=for-the-badge\&logo=openapiinitiative\&logoColor=white)
+
+### Ingesta y extracción de documentos
+
+![PyMuPDF](https://img.shields.io/badge/PyMuPDF-3776AB?style=for-the-badge)
+![python-docx](https://img.shields.io/badge/python--docx-3776AB?style=for-the-badge)
+![MSAL](https://img.shields.io/badge/MSAL-0078D4?style=for-the-badge\&logo=microsoft\&logoColor=white)
+![requests](https://img.shields.io/badge/requests-333333?style=for-the-badge\&logo=python\&logoColor=white)
+
+### Otros componentes
+
+![psutil](https://img.shields.io/badge/psutil-3776AB?style=for-the-badge)
+![.env example](https://img.shields.io/badge/.env--example-FFD21F?style=for-the-badge)
+
+---
+
+## Documentación de las fases de desarrollo
 
 ### **FASE 1: Preparación del entorno**
 
