@@ -5,7 +5,7 @@
 set -euo pipefail
 
 CONTAINER="rag_asistente-weaviate-1"
-DATA_ROOT="/data/weaviate_data"
+DATA_ROOT="/home/consistorioai/weaviate_data"
 INCOMING="$DATA_ROOT/incoming"
 ARCHIVE="$DATA_ROOT/archivados"
 

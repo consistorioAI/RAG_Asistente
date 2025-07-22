@@ -6,6 +6,3 @@ Requires=docker.service
 [Service]
 Type=simple
 ExecStart=/bin/bash /home/consistorioai/RAG_Asistente/watch_services.sh
-Restart=always
-RestartSec=30
-
