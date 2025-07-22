@@ -8,7 +8,12 @@
 
 PROJECT_DIR="/home/consistorioai/RAG_Asistente"
 VENV_PATH="$PROJECT_DIR/venv/bin/activate"
-LOG_FILE="$PROJECT_DIR/rag_api.log"
+
+# Directorio donde se almacenarán los logs rotados por fecha
+LOG_DIR="/home/consistorioai/logs"
+mkdir -p "$LOG_DIR"
+# Nombre del log actual basado en la fecha
+LOG_FILE="$LOG_DIR/rag_api_$(date +%F).log"
 
 cd "$PROJECT_DIR" || exit 1
 
