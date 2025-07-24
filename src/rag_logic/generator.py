@@ -102,8 +102,8 @@ def get_rag_chain(gpt_id: str = "default", k: int = settings.RETRIEVER_K):
         # ✅ Filtrado y priorización avanzada
         docs = filter_docs_by_token_limit(docs, question, max_tokens=settings.MAX_CONTEXT_TOKENS)
 
-        # 👉 Añadir nombre del documento al contexto SOLO si es perfil consultor
-        if gpt_id == "consultor":
+        # 👉 Añadir nombre del documento al contexto si el perfil lo requiere
+        if gpt_id in {"consultor", "procesal"}:
             for doc in docs:
                 filename = doc.metadata.get("filename") or doc.metadata.get("source") or "documento_desconocido"
                 header = f"[Documento fuente: {filename.replace('.pdf', '')}]\n"
