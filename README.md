@@ -208,8 +208,8 @@
 
 - Simulación de estructura futura para múltiples GPTs (`legal`, `laboral`, etc.)
 
-- Se añaden los perfiles `contratacion` y `consultor`, cada uno con su propia
-  colección en Weaviate y prompt especializado.
+- Se añaden los perfiles `contratacion`, `consultor`, `economico` y `procesal`,
+  cada uno con su propia colección en Weaviate y prompt especializado.
     
 
 ---
@@ -233,6 +233,8 @@
     python scripts/sync_and_index.py --gpt_id default
     python scripts/sync_and_index.py --gpt_id contratacion
     python scripts/sync_and_index.py --gpt_id consultor
+    python scripts/sync_and_index.py --gpt_id economico
+    python scripts/sync_and_index.py --gpt_id procesal
     ```
     
 - Confirmación de regeneración exitosa con chunks más cortos y mejor distribuidos

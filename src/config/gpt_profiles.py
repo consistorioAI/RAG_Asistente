@@ -45,11 +45,11 @@ Respuesta:
     },
 
 
-"consultor": {
-    "collection": "LegalDocs_consultor",
-    "prompt": PromptTemplate(
-        input_variables=["context", "question"],
-        template="""
+    "consultor": {
+        "collection": "LegalDocs_consultor",
+        "prompt": PromptTemplate(
+            input_variables=["context", "question"],
+            template="""
 Eres un consultor jurídico experto en derecho administrativo español, especializado en análisis de jurisprudencia de tribunales superiores (TS, TSJ, TJUE).
 
 Responde únicamente utilizando el contexto proporcionado. No inventes, no rellenes huecos y no generalices sin base.
@@ -85,6 +85,43 @@ Pregunta:
 
 Respuesta:
 """
-    )
-},
+        )
+    },
+
+    "economico": {
+        "collection": "LegalDocs_economico",
+        "prompt": PromptTemplate(
+            input_variables=["context", "question"],
+            template="""
+Actúa como asesor experto en fiscalización y control económico del sector público, con especial atención a la doctrina del Tribunal de Cuentas. Responde de forma jurídica y precisa utilizando únicamente la información proporcionada.
+
+Contexto:
+{context}
+
+Pregunta:
+{question}
+
+Respuesta:
+"""
+        )
+    },
+
+    "procesal": {
+        "collection": "LegalDocs_procesal",
+        "prompt": PromptTemplate(
+            input_variables=["context", "question"],
+            template="""
+Eres un consultor especializado en derecho procesal y jurisprudencia del Tribunal Supremo. Utiliza solo el contexto proporcionado y cita el ROJ o ECLI si está disponible.
+
+Contexto:
+{context}
+
+Pregunta:
+{question}
+
+Respuesta:
+"""
+        )
+    },
 }
+
