@@ -74,37 +74,49 @@ class OneDriveClient:
 
     # ---------- Operaciones de ficheros --------------------------------------
     def list_files(self, drive_id: str, folder_path: str):
-        """Lista los elementos de la carpeta."""
+        """Lista los elementos de la carpeta admitiendo paginación."""
         url = f"{self.base_url}/drives/{drive_id}/root:/{folder_path}:/children"
         headers = self._headers()
+        items: list[dict] = []
 
-        for attempt in range(1, self.max_retries + 1):
-            print(f"🌐  GET {url} (intento {attempt}/{self.max_retries})")
-            try:
-                resp = requests.get(url, headers=headers)
-            except RequestException as e:
-                print(f"   ❌  Error de conexión: {e}")
-                if attempt == self.max_retries:
-                    raise
-                print(f"   ↻  Reintentando en {self.retry_delay}s…")
-                time.sleep(self.retry_delay)
-                continue
+        while url:
+            resp = None
+            for attempt in range(1, self.max_retries + 1):
+                print(f"🌐  GET {url} (intento {attempt}/{self.max_retries})")
+                try:
+                    resp = requests.get(url, headers=headers)
+                except RequestException as e:
+                    print(f"   ❌  Error de conexión: {e}")
+                    if attempt == self.max_retries:
+                        raise
+                    print(f"   ↻  Reintentando en {self.retry_delay}s…")
+                    time.sleep(self.retry_delay)
+                    continue
 
-            print("   → Status", resp.status_code)
+                print("   → Status", resp.status_code)
 
-            if resp.status_code == 200:
-                return resp.json().get("value", [])
+                if resp.status_code == 200:
+                    break
 
-            if resp.status_code >= 500:
-                print("   ❌  Error del servidor")
-                if attempt == self.max_retries:
-                    resp.raise_for_status()
-                print(f"   ↻  Reintentando en {self.retry_delay}s…")
-                time.sleep(self.retry_delay)
-                continue
+                if resp.status_code >= 500:
+                    print("   ❌  Error del servidor")
+                    if attempt == self.max_retries:
+                        resp.raise_for_status()
+                    print(f"   ↻  Reintentando en {self.retry_delay}s…")
+                    time.sleep(self.retry_delay)
+                    continue
 
-            print("   ❌  Cuerpo:", resp.text[:500])
-            resp.raise_for_status()
+                print("   ❌  Cuerpo:", resp.text[:500])
+                resp.raise_for_status()
+
+            if resp is None:
+                break
+
+            data = resp.json()
+            items.extend(data.get("value", []))
+            url = data.get("@odata.nextLink")
+
+        return items
 
     def download_folder(self, drive_id: str, folder_path: str, dest_dir: Path):
         """Descarga todos los archivos de la carpeta en dest_dir."""

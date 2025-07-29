@@ -279,6 +279,7 @@ Clase 'LegalDocs_default' eliminada de Weaviate.
   - Se añade un ejemplo de configuración en `*.env.example`.
   - Nuevo script `scripts/check_onedrive.py` para verificar la conectividad listando el contenido de la ruta configurada.
   - Nuevos parámetros `ONEDRIVE_MAX_RETRIES` y `ONEDRIVE_RETRY_DELAY` controlan los reintentos automáticos en las operaciones del cliente mostrando mensajes en consola cuando ocurren.
+  - Ahora la sincronización con OneDrive soporta paginación para recorrer carpetas grandes sin perder elementos.
 
 
 ---
